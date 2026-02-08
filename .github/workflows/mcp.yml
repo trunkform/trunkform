@@ -10,6 +10,10 @@ on:
       - 'mcp/**/*'
       - '.github/workflows/mcp.yml'
 
+env:
+  tf_version: '1.14.4'
+  TG_NON_INTERACTIVE: true
+
 jobs:
   ci-then-cd:
     name: ${{ matrix.ENV }}
@@ -26,14 +30,25 @@ jobs:
       contents: read  # This is required for actions/checkout
 
     runs-on: ubuntu-latest
-    env:
-      TG_NON_INTERACTIVE: true
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
         with:
           go-version: '1.21'
       - run: make
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: ${{ env.tf_version }}
+      - run: |
+          curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.99.1/terragrunt_linux_amd64.tar.gz -o terragrunt_linux_amd64.tar.gz
+          echo "d0bc7f2e9e986f0be7941053471afb0ebd05c14844a57266b99c5896698397aa terragrunt_linux_amd64.tar.gz" | sha256sum -c
+          tar xz < terragrunt_linux_amd64.tar.gz && chmod u+x terragrunt_linux_amd64 && sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+      - run: terragrunt run --all init
+        working-directory: ./mcp/infra/${{ matrix.ENV }}
+      - run: terragrunt run --all apply
+        working-directory: ./mcp/infra/${{ matrix.ENV }}
+      - run: rm -rf "**/.terragrunt-cache"
+        if: always()
       - uses: gruntwork-io/terragrunt-action@v2
         with:
           tf_version: 1.14.4
