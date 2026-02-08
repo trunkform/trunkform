@@ -1,0 +1,36 @@
+name: ci-then-cd
+
+concurrency: ci-then-cd
+
+on:
+  push:
+    branches:
+      - trunk
+
+jobs:
+  ci-then-cd:
+    name: ${{ matrix.ENV }}
+    strategy:
+      matrix:
+        ENV:
+          - ci
+          - prod
+      max-parallel: 1
+    permissions:
+      contents: read  # This is required for actions/checkout
+
+    runs-on: ubuntu-latest
+    env:
+      TG_NON_INTERACTIVE: true
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+        with:
+          go-version: '1.21'
+      - run: make
+      - uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tf_version: 1.14.4
+          tg_version: 0.99.1
+          tg_dir: mcp/infra/${{ matrix.ENV }}
+          tg_command: run --all apply
