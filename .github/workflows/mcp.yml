@@ -41,7 +41,7 @@ jobs:
           terraform_version: ${{ env.tf_version }}
       - run: |
           curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.99.1/terragrunt_linux_amd64.tar.gz -o terragrunt_linux_amd64.tar.gz
-          echo "d0bc7f2e9e986f0be7941053471afb0ebd05c14844a57266b99c5896698397aa  terragrunt_linux_amd64.tar.gz" | shasum -a 256 -c
+          echo "0e6e195111d614d9df0285d1593c5d26d801e205e805b7e0acaaf36fea28911d  terragrunt_linux_amd64.tar.gz" | shasum -a 256 -c
           tar xz < terragrunt_linux_amd64.tar.gz && chmod u+x terragrunt_linux_amd64 && sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
       - run: terragrunt run --all init
         working-directory: ./mcp/infra/${{ matrix.ENV }}
