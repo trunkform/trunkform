@@ -8,7 +8,8 @@ all: deps build test local-int-test-http local-perf-test install
 
 kill:
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== KILL ===\033[0m"; fi
-	@pkill -f trunkform-mcp || if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[33mNo trunkform-mcp processes found\033[0m"; fi
+	@pkill -f trunkform-mcp || true
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then pkill -f trunkform-mcp > /dev/null 2>&1 || echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[33mNo trunkform-mcp processes found\033[0m"; fi
 
 deps:
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== DEPENDENCIES ===\033[0m"; fi
