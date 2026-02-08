@@ -49,9 +49,3 @@ jobs:
         working-directory: ./mcp/infra/${{ matrix.ENV }}
       - run: rm -rf "**/.terragrunt-cache"
         if: always()
-      - uses: gruntwork-io/terragrunt-action@v2
-        with:
-          tf_version: 1.14.4
-          tg_version: 0.99.1
-          tg_dir: mcp/infra/${{ matrix.ENV }}
-          tg_command: run --all apply
