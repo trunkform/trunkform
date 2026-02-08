@@ -6,10 +6,14 @@ on:
   push:
     branches:
       - trunk
-
+    paths:
+      - './mcp/**'
 jobs:
   ci-then-cd:
     name: ${{ matrix.ENV }}
+    defaults:
+      run:
+        working-directory: ./mcp
     strategy:
       matrix:
         ENV:

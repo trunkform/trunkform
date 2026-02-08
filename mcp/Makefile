@@ -31,7 +31,7 @@ build:
 
 test:
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== UNIT TESTS ===\033[0m"; fi
-	@go test -skip 'TestTrunkformLoadTest' -coverprofile=coverage.out -v 2>&1 | sed \
+	@go test -skip 'TestTrunkformLoadTest' -coverprofile=coverage.out -v 2>&1 | tee /tmp/test_output.txt | sed \
 	  -e '/^=== RUN/d' \
 	  -e '/^=== PAUSE/d' \
 	  -e '/^=== CONT/d' \
@@ -47,6 +47,10 @@ test:
 	  -e "s|^\\(coverage:.*\\)|$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \\x1b[90m\\1\\x1b[0m|" \
 	  -e "s|^\\(ok.*trunkform-mcp.*\\)|$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \\x1b[90m\\1\\x1b[0m|" \
 	  -e "s|^\\(FAIL[[:space:]].*trunkform-mcp.*\\)|$$(date '+%Y/%m/%d %H:%M:%S') [ERROR] \\x1b[90m\\1\\x1b[0m|"
+	@if grep -q "^FAIL$$" /tmp/test_output.txt; then \
+		echo "$$(date '+%Y/%m/%d %H:%M:%S') [ERROR] \033[31m✗ Unit tests failed\033[0m"; \
+		exit 1; \
+	fi
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then \
 		go tool cover -func=coverage.out | grep -v "total:" | while read line; do \
 			echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[90m$$line\033[0m"; \

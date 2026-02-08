@@ -15,12 +15,12 @@ func TestConstants(t *testing.T) {
 	}
 
 	expectedCritical := `CRITICAL: Add newly created relative folders and relative file paths to the .trunkform yaml file's .related
- string array when updating the yaml .rubric rule true when it has actually been implemented, and update the list of .tools when a new tool is used.`
+ string array when updating the yaml .rubric rule true when it has actually been implemented, and update the list of .tools when a new tool is implemented`
 	if CriticalPrefix != expectedCritical {
 		t.Errorf("CriticalPrefix = %q, want %q", CriticalPrefix, expectedCritical)
 	}
 
-	expectedNever := `NEVER guess at trunkform tool inputs - only use values directly from the .trunkform file.`
+	expectedNever := `NEVER guess at trunkform tool inputs - only use values directly from the .trunkform file. When a trunkform rubric item is made true (even the last one in the list), call the trunkform tool again with the updated .trunkform file.`
 	if NeverGuess != expectedNever {
 		t.Errorf("NeverGuess = %q, want %q", NeverGuess, expectedNever)
 	}
