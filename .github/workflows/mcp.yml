@@ -7,7 +7,9 @@ on:
     branches:
       - trunk
     paths:
-      - './mcp/**'
+      - 'mcp/**/*'
+      - '.github/workflows/mcp.yml'
+
 jobs:
   ci-then-cd:
     name: ${{ matrix.ENV }}
