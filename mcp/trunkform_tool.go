@@ -11,8 +11,10 @@ import (
 type TrunkformTool struct{}
 
 const InstructionPrefix = "instructions for the AI assistant to act on behalf of user's needs: "
-const CriticalPrefix = `CRITICAL: Add newly created relative folders and relative file paths to the .trunkform yaml file's .related
- string array when updating the yaml .rubric rule true when it has actually been implemented, and update the list of .tools when a new tool is implemented`
+const CriticalPrefix = `CRITICAL: Add newly created file paths (relative to the git repo root) to the .related string array 
+when they reside above the current working directory (using writefile, or write_file tool). CRITICAL: update the .rubric step 
+in the .trunkform (yml) file (using writefile, or write_file tool) when it has been implemented or proven Not Applicable BEFORE calling trunkform tool again. 
+CRITICAL: Update the list of .tools when a new technology, framework, or tooling is implemented (using writefile, or write_file tool)`
 const NeverGuess = `NEVER guess at trunkform tool inputs - only use values directly from the .trunkform file. When a trunkform rubric item is made true (even the last one in the list), call the trunkform tool again with the updated .trunkform file.`
 
 func AskTheUser(question string) string {
@@ -201,16 +203,15 @@ func (tt TrunkformTool) Register(s *server.MCPServer) {
 	logf.Tracef("TrunkformTool.Register: registering trunkform tool", "\x1b[90m")
 	t := mcp.NewTool(
 		"trunkform",
-		mcp.WithDescription(`
-Returns instructions for the AI assistant to act on behalf of user's needs when 
-passed fields from the .trunkform YAML file in the current folder. NEVER guess at input values - always 
-read the .trunkform file from disk and use those exact values, and if the .trunkform file does not exist, 
-the agent should create the .trunkform file in the current directory with the following schema and default 
+		mcp.WithDescription(InstructionPrefix + `
+Use ReadFile (readfile, or read_file) tool to read fields from the .trunkform (yml) file in the current folder. NEVER guess at input values - always 
+read the .trunkform file (read_file, readfile tool) from disk for each call to the trunkform tool, and if the .trunkform file does not exist, 
+the agent should create the .trunkform file (using write_file, or writefile tool) in the current directory with the following schema and default 
 values:
 ---
 version: 0.1.0
 tools: []
-steering: null
+steering: strict
 related: []
 rubric:
 	perf-test-implemented: false

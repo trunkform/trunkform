@@ -14,8 +14,7 @@ func TestConstants(t *testing.T) {
 		t.Errorf("InstructionPrefix = %q, want %q", InstructionPrefix, expectedPrefix)
 	}
 
-	expectedCritical := `CRITICAL: Add newly created relative folders and relative file paths to the .trunkform yaml file's .related
- string array when updating the yaml .rubric rule true when it has actually been implemented, and update the list of .tools when a new tool is implemented`
+	expectedCritical := "CRITICAL: Add newly created file paths (relative to the git repo root) to the .related string array \nwhen they reside above the current working directory (using writefile, or write_file tool). CRITICAL: update the .rubric step \nin the .trunkform (yml) file (using writefile, or write_file tool) when it has been implemented or proven Not Applicable BEFORE calling trunkform tool again. \nCRITICAL: Update the list of .tools when a new technology, framework, or tooling is implemented (using writefile, or write_file tool)"
 	if CriticalPrefix != expectedCritical {
 		t.Errorf("CriticalPrefix = %q, want %q", CriticalPrefix, expectedCritical)
 	}
