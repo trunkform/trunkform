@@ -1,6 +1,6 @@
-name: ci-then-cd
+name: mcp
 
-concurrency: ci-then-cd
+concurrency: mcp
 
 on:
   push:
