@@ -13,7 +13,7 @@ Parameters:
     Default: "ref:refs/heads/trunk"
   OIDCProviderArn:
     Description: Arn for the GitHub OIDC Provider.
-    Default: "arn:aws:iam::131298134547:oidc-provider/token.actions.githubusercontent.com"
+    Default: "arn:aws:iam::245760921574:oidc-provider/token.actions.githubusercontent.com"
     Type: String
 
 Resources:

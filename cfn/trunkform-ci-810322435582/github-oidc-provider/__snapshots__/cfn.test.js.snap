@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`cfn.yml matches snapshot 1`] = `
+{
+  "Outputs": {
+    "GithubOidcProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GithubOidcProvider",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Resources": {
+    "GithubOidcProvider": {
+      "Properties": {
+        "ClientIdList": [
+          "sts.amazonaws.com",
+        ],
+        "ThumbprintList": [
+          "6938fd4d98bab03faadb97b34396831e3780aea1",
+        ],
+        "Url": "https://token.actions.githubusercontent.com",
+      },
+      "Type": "AWS::IAM::OIDCProvider",
+    },
+  },
+}
+`;

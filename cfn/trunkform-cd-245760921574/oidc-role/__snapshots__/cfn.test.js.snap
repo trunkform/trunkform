@@ -29,7 +29,7 @@ exports[`cfn.yml matches snapshot 1`] = `
       "Type": "String",
     },
     "OIDCProviderArn": {
-      "Default": "arn:aws:iam::131298134547:oidc-provider/token.actions.githubusercontent.com",
+      "Default": "arn:aws:iam::245760921574:oidc-provider/token.actions.githubusercontent.com",
       "Description": "Arn for the GitHub OIDC Provider.",
       "Type": "String",
     },
