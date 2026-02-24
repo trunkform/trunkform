@@ -16,7 +16,7 @@ env:
 
 jobs:
   ci-then-cd:
-    name: ${{ matrix.ENV }}
+    name: ${{ matrix.ENV.environment }}
     defaults:
       run:
         working-directory: ./mcp
