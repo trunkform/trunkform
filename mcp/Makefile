@@ -86,7 +86,7 @@ local-int-test-http: kill
 	if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[33mCall trunkform tool w/ perf-test-implemented:false...\033[0m"; fi; \
 	RESPONSE=$$(curl -s -H "Mcp-Session-Id: $$SID" -H 'Content-Type: application/json' -X POST \
 	  -d '{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"trunkform","arguments":{"version":"0.1.0","tools":["test"],"steering":"strict","related":[],"rubric":{"perf-test-implemented":false}}}}' $(MCP)); \
-	if echo "$$RESPONSE" | grep -q "instructions for the AI assistant to act on behalf of user's needs:"; then \
+	if echo "$$RESPONSE" | grep -q "INSTRUCTIONS FOR THE AI ASSISTANT TO ACT ON BEHALF OF USER'S NEEDS:"; then \
 		if [ $(MAKE_LOGLEVEL) -ge 5 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [DEBUG] \x1b[90mResponse: $$RESPONSE\x1b[0m"; fi; \
 		if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Trunkform tool test passed\033[0m"; fi; \
 	else \
@@ -125,7 +125,7 @@ local-perf-test: kill
 		exit 1; \
 	fi
 
-install: deps build
+install: deps build kill
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== INSTALL ===\033[0m"; fi
 	@GOBIN_PATH=$$(go env GOPATH)/bin; \
 	if ! echo "$$PATH" | grep -q "$$GOBIN_PATH"; then \

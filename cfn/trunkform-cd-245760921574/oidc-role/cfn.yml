@@ -1,0 +1,36 @@
+Parameters:
+  GitHubOrg:
+    Description: the name of your github organization.
+    Type: String
+    Default: "trunkform"
+  GitHubRepo:
+    Description: the name of your github repository in your organization.
+    Type: String
+    Default: "trunkform"
+  GitHubRef:
+    Description: "the refs of your github repository in your organization. IE. 'ref:refs/heads/*' or 'pull_request'"
+    Type: String
+    Default: "ref:refs/heads/trunk"
+  OIDCProviderArn:
+    Description: Arn for the GitHub OIDC Provider.
+    Default: "arn:aws:iam::131298134547:oidc-provider/token.actions.githubusercontent.com"
+    Type: String
+
+Resources:
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub github-oidc-provider-${GitHubRepo}
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: sts:AssumeRoleWithWebIdentity
+          Principal:
+            Federated: !Sub ${OIDCProviderArn}
+          Condition:
+            StringLike:
+              token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${GitHubRepo}:${GitHubRef}
+
+Outputs:
+  GitHubRole:
+    Value: !GetAtt Role.Arn

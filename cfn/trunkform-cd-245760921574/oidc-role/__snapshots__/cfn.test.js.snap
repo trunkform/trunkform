@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`cfn.yml matches snapshot 1`] = `
+{
+  "Outputs": {
+    "GitHubRole": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Role",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "GitHubOrg": {
+      "Default": "trunkform",
+      "Description": "the name of your github organization.",
+      "Type": "String",
+    },
+    "GitHubRef": {
+      "Default": "ref:refs/heads/trunk",
+      "Description": "the refs of your github repository in your organization. IE. 'ref:refs/heads/*' or 'pull_request'",
+      "Type": "String",
+    },
+    "GitHubRepo": {
+      "Default": "trunkform",
+      "Description": "the name of your github repository in your organization.",
+      "Type": "String",
+    },
+    "OIDCProviderArn": {
+      "Default": "arn:aws:iam::131298134547:oidc-provider/token.actions.githubusercontent.com",
+      "Description": "Arn for the GitHub OIDC Provider.",
+      "Type": "String",
+    },
+  },
+  "Resources": {
+    "Role": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": {
+                    "Fn::Sub": "repo:\${GitHubOrg}/\${GitHubRepo}:\${GitHubRef}",
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": {
+                  "Fn::Sub": "\${OIDCProviderArn}",
+                },
+              },
+            },
+          ],
+        },
+        "RoleName": {
+          "Fn::Sub": "github-oidc-provider-\${GitHubRepo}",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;

@@ -23,8 +23,10 @@ jobs:
     strategy:
       matrix:
         ENV:
-          - ci
-          - prod
+          - environment: ci
+            account: 810322435582
+          - environment: prod
+            account: 245760921574
       max-parallel: 1
     permissions:
       contents: read  # This is required for actions/checkout
@@ -36,6 +38,10 @@ jobs:
         with:
           go-version: '1.21'
       - run: make
+      - uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 #v6.0.0
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::{{ matrix.ENV.account }}:role/github-oidc-provider-trunkform
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: ${{ env.tf_version }}
@@ -44,8 +50,8 @@ jobs:
           echo "0e6e195111d614d9df0285d1593c5d26d801e205e805b7e0acaaf36fea28911d  terragrunt_linux_amd64.tar.gz" | shasum -a 256 -c
           tar xz < terragrunt_linux_amd64.tar.gz && chmod u+x terragrunt_linux_amd64 && sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
       - run: terragrunt run --all init
-        working-directory: ./mcp/infra/${{ matrix.ENV }}
+        working-directory: ./mcp/infra/${{ matrix.ENV.environment }}
       - run: terragrunt run --all apply
-        working-directory: ./mcp/infra/${{ matrix.ENV }}
+        working-directory: ./mcp/infra/${{ matrix.ENV.environment }}
       - run: rm -rf "**/.terragrunt-cache"
         if: always()

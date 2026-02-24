@@ -19,8 +19,10 @@ jobs:
     strategy:
       matrix:
         ENV:
-          - ci
-          - prod
+          - environment: ci
+            account: 810322435582
+          - environment: prod
+            account: 245760921574
       max-parallel: 1
     permissions:
       contents: read  # This is required for actions/checkout
@@ -34,3 +36,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 #v6.0.0
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::{{ matrix.ENV.account }}:role/github-oidc-provider-trunkform
