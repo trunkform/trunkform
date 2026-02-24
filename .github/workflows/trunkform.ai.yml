@@ -25,7 +25,6 @@ jobs:
             account: 245760921574
       max-parallel: 1
     permissions:
-    permissions:
       id-token: write # This is required for OIDC authentication with AWS
       contents: read  # This is required for actions/checkout
 
