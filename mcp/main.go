@@ -24,7 +24,7 @@ var startServer = func(port string) error {
 
 func main() {
   logf.Debugf("main: starting trunkform-mcp server", "\x1b[90m")
-  port := os.Getenv("PORT")
+  port := os.Getenv("TRUNKFORM_PORT")
   if port == "" {
     port = "8080"
   }

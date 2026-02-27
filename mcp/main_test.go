@@ -25,8 +25,8 @@ func TestMain(t *testing.T) {
     panic("exit test")
   }
   
-  os.Setenv("PORT", "9999")
-  defer os.Unsetenv("PORT")
+  os.Setenv("TRUNKFORM_PORT", "9999")
+  defer os.Unsetenv("TRUNKFORM_PORT")
   
   func() {
     defer func() { recover() }()
@@ -49,7 +49,7 @@ func TestMainDefaultPort(t *testing.T) {
     recover()
   }()
   
-  os.Unsetenv("PORT")
+  os.Unsetenv("TRUNKFORM_PORT")
   
   called := false
   startServer = func(port string) error {
