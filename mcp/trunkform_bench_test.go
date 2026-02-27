@@ -5,6 +5,7 @@ import (
   "encoding/json"
   "fmt"
   "net/http"
+  "os"
   "sync"
   "testing"
   "time"
@@ -14,6 +15,11 @@ func TestTrunkformLoadTest(t *testing.T) {
   // Test 10,000 requests in 30 seconds = ~333 RPS
   totalRequests := 10000
   testDuration := 30 * time.Second
+
+  port := os.Getenv("TRUNKFORM_PORT")
+  if port == "" {
+    port = "8080"
+  }
 
   var wg sync.WaitGroup
   var successCount, errorCount int64
@@ -43,7 +49,7 @@ func TestTrunkformLoadTest(t *testing.T) {
         },
       }
       body, _ := json.Marshal(initPayload)
-      req, _ := http.NewRequest("POST", "http://localhost:8080/mcp", bytes.NewBuffer(body))
+      req, _ := http.NewRequest("POST", "http://localhost:"+port+"/mcp", bytes.NewBuffer(body))
       req.Header.Set("Content-Type", "application/json")
       
       resp, err := client.Do(req)
@@ -75,7 +81,7 @@ func TestTrunkformLoadTest(t *testing.T) {
         },
       }
       body, _ = json.Marshal(trunkformPayload)
-      req, _ = http.NewRequest("POST", "http://localhost:8080/mcp", bytes.NewBuffer(body))
+      req, _ = http.NewRequest("POST", "http://localhost:"+port+"/mcp", bytes.NewBuffer(body))
       req.Header.Set("Content-Type", "application/json")
       req.Header.Set("Mcp-Session-Id", sessionID)
       

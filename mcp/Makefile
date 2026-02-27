@@ -127,7 +127,7 @@ local-perf-test:
 	trap cleanup EXIT; \
 	sleep 1; \
 	if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[33mRunning performance test...\033[0m"; fi; \
-	go test -run=TestTrunkformLoadTest -v 2>&1 | tee /tmp/test_output.txt | sed \
+	TRUNKFORM_PORT=8081 go test -run=TestTrunkformLoadTest -v 2>&1 | tee /tmp/test_output.txt | sed \
 	  -e '/^=== RUN/d' \
 	  -e '/^exit status 1$$/d' \
 	  -e 's/^\(#.*\)/\x1b[90m\1\x1b[0m/' \
