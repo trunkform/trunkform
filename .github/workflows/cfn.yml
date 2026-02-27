@@ -1,6 +1,6 @@
-name: mcp
+name: cfn
 
-concurrency: mcp
+concurrency: cfn
 
 on:
   push:
