@@ -36,6 +36,7 @@ jobs:
           grep -i '🚀' copilot.log
         working-directory: ./copilot-test
       - run: cat copilot.log
+        working-directory: ./copilot-test
         if: always()
       - run: pkill trunkform-mcp || true
         if: always()
