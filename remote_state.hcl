@@ -15,7 +15,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    bucket  = "terraform-state-${local.account}"
+    bucket  = "trunkform-state-${local.account}"
     key     = local.key
     region  = local.region
     encrypt = true

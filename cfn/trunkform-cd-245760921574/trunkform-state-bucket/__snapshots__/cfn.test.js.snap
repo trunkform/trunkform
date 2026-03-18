@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`cfn.yml matches snapshot 1`] = `
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "S3 bucket for Terraform state",
+  "Outputs": {
+    "BucketName": {
+      "Value": {
+        "Ref": "StateBucket",
+      },
+    },
+  },
+  "Resources": {
+    "StateBucket": {
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "BucketKeyEnabled": false,
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": "arn:aws:kms:us-east-2:245760921574:alias/aws/s3",
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "BucketName": "trunkform-state-245760921574",
+        "VersioningConfiguration": {
+          "Status": "Enabled",
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+    },
+    "StateBucketPolicy": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "StateBucket",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                "arn:aws:s3:::trunkform-state-245760921574",
+                "arn:aws:s3:::trunkform-state-245760921574/*",
+              ],
+              "Sid": "EnforcedTLS",
+            },
+            {
+              "Action": "s3:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::245760921574:root",
+              },
+              "Resource": [
+                "arn:aws:s3:::trunkform-state-245760921574",
+                "arn:aws:s3:::trunkform-state-245760921574/*",
+              ],
+              "Sid": "RootAccess",
+            },
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::245760921574:role/github-oidc-provider-trunkform",
+              },
+              "Resource": "arn:aws:s3:::trunkform-state-245760921574",
+              "Sid": "ListBucketAccess",
+            },
+            {
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::245760921574:role/github-oidc-provider-trunkform",
+              },
+              "Resource": "arn:aws:s3:::trunkform-state-245760921574/*",
+              "Sid": "ObjectAccess",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+  },
+}
+`;

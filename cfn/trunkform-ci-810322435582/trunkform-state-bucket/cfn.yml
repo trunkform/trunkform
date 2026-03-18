@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: S3 bucket for Terraform state
+
+Resources:
+  StateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: trunkform-state-810322435582
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: false
+            ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: arn:aws:kms:us-east-2:810322435582:alias/aws/s3
+
+  StateBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref StateBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: EnforcedTLS
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:*"
+            Resource:
+              - arn:aws:s3:::trunkform-state-810322435582
+              - arn:aws:s3:::trunkform-state-810322435582/*
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+          - Sid: RootAccess
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::810322435582:root
+            Action: "s3:*"
+            Resource:
+              - arn:aws:s3:::trunkform-state-810322435582
+              - arn:aws:s3:::trunkform-state-810322435582/*
+
+          - Sid: ListBucketAccess
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::810322435582:role/github-oidc-provider-trunkform
+            Action: s3:ListBucket
+            Resource: arn:aws:s3:::trunkform-state-810322435582
+
+          - Sid: ObjectAccess
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::810322435582:role/github-oidc-provider-trunkform
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource: arn:aws:s3:::trunkform-state-810322435582/*
+
+Outputs:
+  BucketName:
+    Value: !Ref StateBucket
