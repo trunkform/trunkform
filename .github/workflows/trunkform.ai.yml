@@ -9,6 +9,7 @@ on:
     paths:
       - 'trunkform.ai/**/*'
       - '.github/workflows/trunkform.ai.yml'
+      - 'remote_state.hcl'
 
 jobs:
   ci-then-cd:

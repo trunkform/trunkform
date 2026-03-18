@@ -9,6 +9,7 @@ on:
     paths:
       - 'mcp/**/*'
       - '.github/workflows/mcp.yml'
+      - 'remote_state.hcl'
 
 env:
   tf_version: '1.14.4'
