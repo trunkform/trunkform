@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         ENV:
-          - environment: persistent-ci-resources
+          - environment: persistent-resources-ci
             account: 810322435582
           - environment: ci
             account: 810322435582
