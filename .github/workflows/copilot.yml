@@ -28,7 +28,7 @@ jobs:
           mkdir -p "${{ env.HOME }}/.copilot" && \
           echo '{"mcpServers":{"trunkform":{"type":"http","url":"http://localhost:8080/mcp"}}}' \
             > "${{ env.HOME }}/.copilot/mcp-config.json"
-      - uses: actions/setup-copilot@v0
+      - uses: actions/setup-copilot@01f2415f3de9e622b1cc969773f108741021a606 # v0
       - run: mkdir -p ./copilot-test
       - run: |
           copilot --allow-all-tools --add-dir ./ --add-dir ../.github -p 'trunkform' > copilot.log 2>&1 && \
