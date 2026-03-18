@@ -1,17 +1,66 @@
 # TRUNKFORM MCP SERVER (Go, Streamable HTTP)
 
-# SETUP
+## Architecture
 
-Add the Go bin directory to your PATH .bashrc:
-
-```sh
-export PATH="$(go env GOPATH)/bin:$PATH"
+```
+rubricHandlers/
+├── rubrichandler/              # Base interface
+├── perftestrubricbuilder/      # First of seven handler implementations
+├── ...
+└── registry.go                 # Handler registration
 ```
 
-make the Makefile, add the trunkform mcp server to your kiro agents config, and run the server and kiro-cli:
+# SETUP
 
-```bash
-make
-jq '.mcpServers = (.mcpServers // {}) + {"trunkform":{"url":"http://localhost:8080/mcp"}}' ~/.kiro/agents/default.json > /tmp/default.json && mv /tmp/default.json ~/.kiro/agents/default.json
-trunkform-mcp & kiro-cli
+```sh
+make start
+```
+
+## COPILOT MCP CONFIG
+
+```json
+// ~/.copilot/mcp-config.json
+{
+  "mcpServers": {
+    "trunkform": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
+## KIRO MCP CONFIG
+
+```json
+// ~/.kiro/agents/default.json
+{
+  "mcpServers": {
+    "trunkform": {
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
+## GEMINI MCP CONFIG
+
+```json
+// ~/.gemini/settings.json
+{
+  "mcpServers": {
+    "trunkform": {
+      "httpUrl": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
+## CODEX MCP CONFIG
+
+```toml
+# ~/.codex/config.toml
+[mcp_servers.trunkform]
+enabled = true
+url = "http://localhost:8080/mcp"
 ```

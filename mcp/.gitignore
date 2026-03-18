@@ -2,3 +2,4 @@ bin/
 .terragrunt-cache/
 coverage.out
 coverage.html
+.gocache/

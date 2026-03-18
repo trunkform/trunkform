@@ -1,0 +1,21 @@
+{
+  "version": "0.1.0",
+  "tools": [
+    "Go",
+    "Make",
+    "GitHub Actions",
+    "testing package (Go's built-in unit testing framework)"
+  ],
+  "related": [
+    "../.github/workflows/mcp.yml"
+  ],
+  "rubric": {
+    "perf-test-implemented": "make",
+    "unit-test-implemented": "cat <<< 'unit tests handled in perf testing step'",
+    "ci-cd-automation-boilerplate": "cat ../.github/workflows/mcp.yml",
+    "continuous-integration-iac": "cat ../.github/workflows/mcp.yml | grep 'terragrunt run --all apply'",
+    "continuous-integration-test-double-implemented": "cat <<< 'test doubles are N/A'",
+    "continuous-integration-mocks-implemented": "cat <<< 'mocks are N/A'",
+    "integration-test-implemented": "cat ../.github/workflows/mcp.yml | grep -- '- environment: ci'"
+  }
+}

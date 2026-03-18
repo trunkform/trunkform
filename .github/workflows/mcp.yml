@@ -23,9 +23,11 @@ jobs:
     strategy:
       matrix:
         ENV:
+          - environment: persistent-ci-resources
+            account: 810322435582
           - environment: ci
             account: 810322435582
-          - environment: prod
+          - environment: cd
             account: 245760921574
       max-parallel: 1
     permissions:
@@ -38,7 +40,7 @@ jobs:
       - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
         with:
           go-version: '1.21'
-      - run: make
+      - run: MAKE_ALL=yup make
       - uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 #v6.0.0
         with:
           aws-region: us-east-2
@@ -50,9 +52,9 @@ jobs:
           curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.99.1/terragrunt_linux_amd64.tar.gz -o terragrunt_linux_amd64.tar.gz
           echo "0e6e195111d614d9df0285d1593c5d26d801e205e805b7e0acaaf36fea28911d  terragrunt_linux_amd64.tar.gz" | shasum -a 256 -c
           tar xz < terragrunt_linux_amd64.tar.gz && chmod u+x terragrunt_linux_amd64 && sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
-      - run: terragrunt run --all init
-        working-directory: ./mcp/infra/${{ matrix.ENV.environment }}
-      - run: terragrunt run --all apply
-        working-directory: ./mcp/infra/${{ matrix.ENV.environment }}
-      - run: rm -rf "**/.terragrunt-cache"
-        if: always()
+      - run: terragrunt run --all init --working-dir ./infra/${{ matrix.ENV.environment }}
+      - run: terragrunt run --all apply --working-dir ./infra/${{ matrix.ENV.environment }}
+      - if: ${{ matrix.ENV.environment == 'ci' }}
+        run: terragrunt run --all apply --working-dir ./infra/ci -- -destroy
+      - if: always()
+        run: rm -rf "**/.terragrunt-cache"
