@@ -1,6 +1,6 @@
 name: trunkform-io
 
-concurrency: trunkform-io
+concurrency: trunkform
 
 on:
   push:

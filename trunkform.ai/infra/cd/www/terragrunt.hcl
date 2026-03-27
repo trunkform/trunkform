@@ -11,9 +11,10 @@ dependency "registered_domain" {
 }
 
 inputs = {
-  account     = "245760921574"
-  domain_name = "trunkform.ai"
-  environment = "cd"
-  region      = "us-east-2"
-  zone_id     = dependency.registered_domain.outputs.zone_id
+  account          = "245760921574"
+  domain_name      = "trunkform.ai"
+  environment      = "cd"
+  region           = "us-east-2"
+  zone_id          = dependency.registered_domain.outputs.zone_id
+  redirect_domains = ["trunkform.com", "trunkform.io", "trunkform.org"]
 }

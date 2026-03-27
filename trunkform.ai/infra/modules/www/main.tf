@@ -18,6 +18,11 @@ variable "zone_id" {
   type = string
 }
 
+variable "redirect_domains" {
+  type    = list(string)
+  default = []
+}
+
 locals {
   bucket  = "${replace(var.domain_name, ".", "-")}-${var.account}"
   region  = var.region
@@ -75,7 +80,7 @@ resource "aws_acm_certificate" "www" {
 
   domain_name               = var.domain_name
   key_algorithm             = "RSA_2048"
-  subject_alternative_names = [var.domain_name]
+  subject_alternative_names = concat([var.domain_name], var.redirect_domains)
   validation_method         = "DNS"
   tags                      = {}
 
@@ -105,8 +110,28 @@ resource "aws_acm_certificate_validation" "www" {
   validation_record_fqdns = [aws_route53_record.cname.fqdn]
 }
 
+resource "aws_cloudfront_function" "redirect" {
+  provider = aws.global
+  name     = replace(var.domain_name, ".", "-")
+  runtime  = "cloudfront-js-2.0"
+  publish  = true
+  code     = <<-EOF
+    function handler(event) {
+      var host = event.request.headers.host.value;
+      if (host !== '${var.domain_name}') {
+        return {
+          statusCode: 302,
+          statusDescription: 'Found',
+          headers: { location: { value: 'https://${var.domain_name}' + event.request.uri } }
+        };
+      }
+      return event.request;
+    }
+  EOF
+}
+
 resource "aws_cloudfront_distribution" "www" {
-  aliases             = [var.domain_name]
+  aliases             = concat([var.domain_name], var.redirect_domains)
   default_root_object = "index.html"
   enabled             = true
   http_version        = "http2"
@@ -130,6 +155,11 @@ resource "aws_cloudfront_distribution" "www" {
 
     grpc_config {
       enabled = false
+    }
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.redirect.arn
     }
   }
 

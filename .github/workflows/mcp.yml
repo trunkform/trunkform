@@ -1,6 +1,6 @@
 name: mcp
 
-concurrency: mcp
+concurrency: trunkform
 
 on:
   push:
