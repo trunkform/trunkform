@@ -1,6 +1,8 @@
 name: trunkform-ai
 
-concurrency: trunkform
+concurrency:
+  group: trunkform
+  cancel-in-progress: false
 
 on:
   push:

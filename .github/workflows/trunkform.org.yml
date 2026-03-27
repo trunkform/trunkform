@@ -1,6 +1,8 @@
 name: trunkform-org
 
-concurrency: trunkform
+concurrency:
+  group: trunkform
+  cancel-in-progress: false
 
 on:
   push:
