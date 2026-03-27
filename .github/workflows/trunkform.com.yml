@@ -1,14 +1,14 @@
-name: trunkform-ai
+name: trunkform-com
 
-concurrency: trunkform-ai
+concurrency: trunkform-com
 
 on:
   push:
     branches:
       - trunk
     paths:
-      - 'trunkform.ai/**/*'
-      - '.github/workflows/trunkform.ai.yml'
+      - 'trunkform.com/**/*'
+      - '.github/workflows/trunkform.com.yml'
       - 'remote_state.hcl'
 
 env:
@@ -20,7 +20,7 @@ jobs:
     name: ${{ matrix.ENV.environment }}
     defaults:
       run:
-        working-directory: ./trunkform.ai
+        working-directory: ./trunkform.com
     strategy:
       matrix:
         ENV:
