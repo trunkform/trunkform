@@ -21,6 +21,8 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub github-oidc-provider-${GitHubRepo}
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow

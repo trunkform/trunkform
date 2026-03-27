@@ -57,6 +57,9 @@ exports[`cfn.yml matches snapshot 1`] = `
             },
           ],
         },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AdministratorAccess",
+        ],
         "RoleName": {
           "Fn::Sub": "github-oidc-provider-\${GitHubRepo}",
         },
