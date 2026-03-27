@@ -14,13 +14,12 @@ output "domain_name" {
   value = var.domain_name
 }
 
-resource "aws_route53_zone" "this" {
-  name = var.domain_name
+output "zone_id" {
+  value = aws_route53_zone.this.zone_id
 }
 
-import {
-  to = aws_route53domains_registered_domain.this
-  id = var.domain_name
+resource "aws_route53_zone" "this" {
+  name = var.domain_name
 }
 
 resource "aws_route53domains_registered_domain" "this" {
@@ -33,9 +32,15 @@ resource "aws_route53domains_registered_domain" "this" {
   billing_privacy    = true
 
   name_server {
-    name = "dns1.registrar-servers.com"
+    name = aws_route53_zone.this.name_servers[0]
   }
   name_server {
-    name = "dns2.registrar-servers.com"
+    name = aws_route53_zone.this.name_servers[1]
+  }
+  name_server {
+    name = aws_route53_zone.this.name_servers[2]
+  }
+  name_server {
+    name = aws_route53_zone.this.name_servers[3]
   }
 }
