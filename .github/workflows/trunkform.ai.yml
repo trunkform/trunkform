@@ -55,7 +55,8 @@ jobs:
       - run: terragrunt run --all apply --working-dir ./infra/${{ matrix.ENV.environment }}
       - run: aws s3 sync ./dist s3://trunkform-ai-${{ matrix.ENV.account }} --delete
       - run: |
-          DIST_ID=$(terragrunt output -raw distribution_id --working-dir ./infra/${{ matrix.ENV.environment }}/www)
+          DIST_ID=$(terragrunt output -raw distribution_id)
           aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
+        working-directory: ./trunkform.ai/infra/${{ matrix.ENV.environment }}/www
       - if: always()
         run: rm -rf "**/.terragrunt-cache"
