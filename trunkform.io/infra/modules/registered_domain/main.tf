@@ -14,6 +14,10 @@ output "domain_name" {
   value = var.domain_name
 }
 
+output "zone_id" {
+  value = aws_route53_zone.this.zone_id
+}
+
 resource "aws_route53_zone" "this" {
   name = var.domain_name
 }
