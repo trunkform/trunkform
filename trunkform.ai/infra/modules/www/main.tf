@@ -187,14 +187,6 @@ output "distribution_id" {
   value = aws_cloudfront_distribution.www.id
 }
 
-output "distribution_domain_name" {
-  value = aws_cloudfront_distribution.www.domain_name
-}
-
-output "distribution_zone_id" {
-  value = aws_cloudfront_distribution.www.hosted_zone_id
-}
-
 resource "aws_s3_bucket_policy" "www" {
   bucket = local.bucket
   policy = jsonencode({
