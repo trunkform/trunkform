@@ -32,15 +32,9 @@ resource "aws_route53domains_registered_domain" "this" {
   billing_privacy    = true
 
   name_server {
-    name = aws_route53_zone.this.name_servers[0]
+    name = "dns1.registrar-servers.com"
   }
   name_server {
-    name = aws_route53_zone.this.name_servers[1]
-  }
-  name_server {
-    name = aws_route53_zone.this.name_servers[2]
-  }
-  name_server {
-    name = aws_route53_zone.this.name_servers[3]
+    name = "dns2.registrar-servers.com"
   }
 }
