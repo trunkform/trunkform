@@ -5,7 +5,5 @@ export default {
 </script>
 
 <template>
-  <nav>
-  </nav>
   <router-view />
 </template>
