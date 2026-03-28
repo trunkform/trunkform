@@ -15,21 +15,23 @@ export default {
   <main>
     <img src="/hero.png" alt="" />
 
-    <section style="min-height: 100vh">
+    <section>
       <nav>
         <a href="/">trunkform</a>
         <!-- <a href="#">log in</a> -->
       </nav>
 
-      <h1>Designed for Speed, Built for Trust</h1>
-      <p>
-        <b>trunkform</b>&trade; helps developers remove process bottlenecks,
-        standardize delivery, and build release ready software.
-      </p>
+      <div class="content">
+        <h1>Designed for Speed, Built for Trust</h1>
+        <p>
+          <b>trunkform</b>&trade; <b>MCP</b> helps developers remove process bottlenecks,
+          standardize delivery, and build release ready software.
+        </p>
 
-      <div>
-        <a href="https://github.com/trunkform/trunkform/blob/trunk/mcp/README.md">learn more</a>
-        <a href="https://github.com/trunkform/trunkform">view the source</a>
+        <div>
+          <a href="https://github.com/trunkform/trunkform/blob/trunk/mcp/README.md">learn more</a>
+          <a href="https://github.com/trunkform/trunkform">view the source</a>
+        </div>
       </div>
     </section>
 
@@ -42,8 +44,25 @@ export default {
 <style scoped>
 main {
   min-height: 100vh;
-  padding: 2rem 4rem;
+  padding: clamp(0.5rem, 3vw, 2rem) clamp(0.75rem, 5vw, 4rem);
   overflow: hidden;
+}
+
+section:first-of-type {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 80vh;
+  max-height: 80vh;
 }
 
 img {
@@ -65,24 +84,30 @@ p {
   color: white;
 }
 
-nav,
 h1,
 h2,
 p,
-div {
+.content > div {
   position: relative;
   z-index: 1;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 2rem;
+  padding-bottom: clamp(0.5rem, 2vw, 2rem);
 }
 
 nav {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: clamp(0.5rem, 2vw, 2rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8rem;
+  margin-bottom: 0rem;
 }
 
 nav a:first-child {
@@ -131,7 +156,7 @@ h1 {
   max-width: 900px;
   margin: 0 auto 1rem;
   color: var(--text);
-  font-size: clamp(4rem, 7vw, 5.5rem);
+  font-size: clamp(1.75rem, 7vw, 5.5rem);
   line-height: 1;
   font-weight: 700;
 }
@@ -140,7 +165,7 @@ h2 {
   max-width: 900px;
   margin: 0 auto;
   color: var(--text);
-  font-size: clamp(3rem, 7vw, 4rem);
+  font-size: clamp(2rem, 7vw, 4rem);
   line-height: 1;
   font-weight: 700;
 }
@@ -148,7 +173,8 @@ h2 {
 p {
   max-width: 900px;
   margin: 0 auto;
-  font-size: 2rem;
+  font-size: clamp(1.3rem, 3.5vw, 2rem);
+  padding-bottom: clamp(0.5rem, 7vw, 1.5rem);
   line-height: 1.4;
 }
 
@@ -168,31 +194,31 @@ p:last-child {
   text-align: left;
 }
 
-div {
-  margin-top: 3rem;
+.content > div {
+  margin-top: clamp(0.75rem, 3vw, 3rem);
   text-align: center;
 }
 
 div a {
   display: inline-block;
-  min-width: 180px;
   margin-right: 1rem;
-  padding: 1.1rem 2rem;
+  padding: clamp(0.65rem, 2vw, 1.1rem) clamp(1rem, 3vw, 2rem);
   border-radius: 12px;
-  font-size: 1.1rem;
+  font-size: clamp(0.875rem, 2.5vw, 1.1rem);
   font-weight: 600;
   text-align: center;
 }
 
 div a:first-child {
   background: linear-gradient(180deg, #1ec8ff 0%, #009ee6 100%);
-  color: #041018;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
   box-shadow: 0 0 24px rgba(0, 191, 255, 0.3);
 }
 
 div a:last-child {
   border: 1px solid rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.742);
+  background: rgba(4, 16, 24, 0.85);
   color: #fff;
 }
 
@@ -201,19 +227,9 @@ div a:last-child {
     padding: 1.5rem;
   }
 
-  nav {
-    margin-bottom: 5rem;
-  }
-
   nav a:first-child {
     font-size: 1.25rem;
-    padding-left: 1.5rem;
-  }
-
-  div a {
-    display: block;
-    width: 100%;
-    margin: 0 0 1rem;
+    padding-left: 0;
   }
 }
 </style>
