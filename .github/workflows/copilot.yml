@@ -10,6 +10,9 @@ on:
       - 'mcp/**/*'
       - '.github/workflows/copilot.yml'
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   ci-then-cd:
     name: copilot
