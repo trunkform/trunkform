@@ -97,7 +97,7 @@ If they do not require additional integration testing, then execute every comman
 7. integration-test-implemented
 If any command fails, ` + AskTheUser(`would you like suggestions on how to remediate the failing test before the rubric item is marked null?`) + `If the user says no, immediately update that rubric item to null in ./trunkform.json, read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform object.
 
-If unit-testcoverage is 100%, has no measurable coverage ("Unknown%" means "no measureable coverage"), then tell the user that "all rubric items tested and complete. yolo", 
+If unit-testcoverage is 100%, has no measurable coverage ("Unknown%" means "no measureable coverage"), then tell the user that "all rubric items tested and complete. yolo 🚀", 
 otherwise` + AskTheUser(`is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?`) + `If the user says no, immediately update ./trunkform.json file so it contains 
 .rubric.unit-test-implemented: null, read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform json object. ` + CriticalPrefix + ` ` + NeverGuess}), nil
 }

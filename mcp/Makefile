@@ -28,7 +28,7 @@ deps: clean
 
 lint: deps
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== LINT ===\033[0m"; fi
-	@golangci-lint run
+	@go tool golangci-lint run
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Lint passed\033[0m"; fi
 	@echo
 

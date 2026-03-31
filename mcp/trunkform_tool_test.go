@@ -152,7 +152,7 @@ func TestProcessRubric(t *testing.T) {
 			"continuous-integration-test-double-implemented": strPtr("make local-int-test-http"),
 			"continuous-integration-mocks-implemented":       strPtr("make local-int-test-http"),
 			"integration-test-implemented":                   strPtr("make local-int-test-http"),
-		}, `all rubric items tested and complete. yolo`},
+		}, `all rubric items tested and complete. yolo 🚀`},
 	}
 
 	for _, tt := range tests {
