@@ -281,18 +281,18 @@ func TestHandleToolEarlyExit(t *testing.T) {
 }
 
 func TestToolsArrayCheck(t *testing.T) {
-	var unitTestHandler rubrichandler.RubricHandler
+	var lintTestHandler rubrichandler.RubricHandler
 	for _, handler := range rubrichandlers.DefaultRubricHandlers() {
-		if handler.Key() == "unit-test-implemented" {
-			unitTestHandler = handler
+		if handler.Key() == "lint-implemented" {
+			lintTestHandler = handler
 			break
 		}
 	}
-	if unitTestHandler.Key() == "" {
-		t.Fatal("expected unit test strategy")
+	if lintTestHandler.Key() != "lint-implemented" {
+		t.Fatal("expected lint strategy")
 	}
-	if !contains(unitTestHandler.Build().Text, "Check the .tools array") {
-		t.Error("handleUnitTestCoverage should check tools array")
+	if !contains(lintTestHandler.Build().Text, "help the user set up a linter appropriate for the language") {
+		t.Error("handleLintCoverage should check tools array")
 	}
 
 	args := trunkformSchema{
@@ -300,7 +300,7 @@ func TestToolsArrayCheck(t *testing.T) {
 		Tools:   []string{"go"},
 		Related: []string{},
 		Rubric: map[string]*string{
-			"lint-implemented":                               strPtr("golangci-lint run"),
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
@@ -312,7 +312,7 @@ func TestToolsArrayCheck(t *testing.T) {
 	}
 	result, _ := processRubric(args)
 	resultText := result.Content[0].(mcp.TextContent).Text
-	if !contains(resultText, `If unit-testcoverage is 100%, has no measurable coverage (\"Unknown%\" means \"no measureable coverage\"), then tell the user that \"all rubric items tested and complete. yolo\"`) {
+	if !contains(resultText, `If unit-testcoverage is 100%, has no measurable coverage (\"Unknown%\" means \"no measureable coverage\"), then tell the user that \"all rubric items tested and complete. yolo 🚀\"`) {
 		t.Error("processRubric completion should include the updated coverage guidance")
 	}
 	if !contains(resultText, `Ask the user, \"is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?\" Wait for their response before proceeding.`) {
