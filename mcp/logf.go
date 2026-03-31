@@ -48,7 +48,7 @@ func (l *Logger) Log(level LogLevel, prefix, message string, colorCode ...string
 	if len(colorCode) > 0 {
 		color = colorCode[0]
 	}
-	fmt.Fprintf(l.writer, "%s [%s] %s%s\x1b[0m\n", timestamp, prefix, color, message)
+	_, _ = fmt.Fprintf(l.writer, "%s [%s] %s%s\x1b[0m\n", timestamp, prefix, color, message)
 }
 
 func (l *Logger) Fatalf(message string, colorCode ...string) {

@@ -99,7 +99,7 @@ If any command fails, ` + AskTheUser(`would you like suggestions on how to remed
 
 If unit-testcoverage is 100%, has no measurable coverage ("Unknown%" means "no measureable coverage"), then tell the user that "all rubric items tested and complete. yolo", 
 otherwise` + AskTheUser(`is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?`) + `If the user says no, immediately update ./trunkform.json file so it contains 
-.rubric.unit-test-implemented: null, read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform json object." ` + CriticalPrefix + `.` + NeverGuess}), nil
+.rubric.unit-test-implemented: null, read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform json object. ` + CriticalPrefix + ` ` + NeverGuess}), nil
 }
 
 func (tt TrunkformTool) handleTool(ctx context.Context, req mcp.CallToolRequest, args trunkformSchema) (*mcp.CallToolResult, error) {
@@ -109,8 +109,6 @@ func (tt TrunkformTool) handleTool(ctx context.Context, req mcp.CallToolRequest,
 	logf.Tracef("trunkform tool called with rubric: "+fmt.Sprintf("%v", args.Rubric), "\x1b[90m")
 	return processRubric(args)
 }
-
-
 
 func (tt TrunkformTool) Register(s *server.MCPServer) {
 	logf.Tracef("TrunkformTool.Register: registering trunkform tool", "\x1b[90m")

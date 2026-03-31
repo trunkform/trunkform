@@ -6,6 +6,7 @@ import (
 	"trunkform-mcp/rubricHandlers/cicdboilerplaterubricbuilder"
 	"trunkform-mcp/rubricHandlers/ciiacrubricbuilder"
 	"trunkform-mcp/rubricHandlers/integrationtestrubricbuilder"
+	"trunkform-mcp/rubricHandlers/lintrubricbuilder"
 	"trunkform-mcp/rubricHandlers/mocksrubricbuilder"
 	"trunkform-mcp/rubricHandlers/perftestrubricbuilder"
 	"trunkform-mcp/rubricHandlers/testdoublesrubricbuilder"
@@ -26,13 +27,14 @@ func TestNewRubricHandlers(t *testing.T) {
 		name string
 		fn   func() interface{}
 	}{
+		{"lint", func() interface{} { return lintrubricbuilder.NewRubricHandler() }},
+		{"unittest", func() interface{} { return unittestrubricbuilder.NewRubricHandler() }},
 		{"cicdboilerplate", func() interface{} { return cicdboilerplaterubricbuilder.NewRubricHandler() }},
 		{"ciiac", func() interface{} { return ciiacrubricbuilder.NewRubricHandler() }},
 		{"integrationtest", func() interface{} { return integrationtestrubricbuilder.NewRubricHandler() }},
+		{"testdoubles", func() interface{} { return testdoublesrubricbuilder.NewRubricHandler() }},
 		{"mocks", func() interface{} { return mocksrubricbuilder.NewRubricHandler() }},
 		{"perftest", func() interface{} { return perftestrubricbuilder.NewRubricHandler() }},
-		{"testdoubles", func() interface{} { return testdoublesrubricbuilder.NewRubricHandler() }},
-		{"unittest", func() interface{} { return unittestrubricbuilder.NewRubricHandler() }},
 	}
 
 	for _, h := range handlers {
@@ -48,16 +50,17 @@ func TestNewRubricHandlers(t *testing.T) {
 func TestDefaultRubricHandlers(t *testing.T) {
 	handlers := DefaultRubricHandlers()
 	expectations := map[string]string{
-		"CI/CD Automation Boilerplate":                    "update .rubric.ci-cd-automation-boilerplate to \"cat <<< \\\"Boilerplate ci-cd automation was created\\\"\"",
+		"Add Linting":                                     "update .rubric.lint-implemented to the exact command used",
 		"Add Unit Test Coverage":                          "update .rubric.unit-test-implemented to the exact command used",
-		"Add Integration Testing":                         "update .rubric.integration-test-implemented to the exact command used",
-		"Add Performance Testing":                         "update .rubric.perf-test-implemented to the exact command used",
+		"CI/CD Automation Boilerplate":                    "update .rubric.ci-cd-automation-boilerplate to \"cat <<< \\\"Boilerplate ci-cd automation was created\\\"\"",
 		"Add Continuous Integration IAC":                  "update .rubric.continuous-integration-iac to the exact command used",
+		"Add Integration Testing":                         "update .rubric.integration-test-implemented to the exact command used",
 		"Add Continuous Integration Test Doubles":         "update .rubric.continuous-integration-test-double-implemented to the exact command used",
 		"Add Continuous Integration Mock Implementations": "update .rubric.continuous-integration-mocks-implemented to the exact command used",
+		"Add Performance Testing":                         "update .rubric.perf-test-implemented to the exact command used",
 	}
 
-	if len(handlers) != 7 {
+	if len(handlers) != 8 {
 		t.Fatalf("expected 7 handlers, got %d", len(handlers))
 	}
 

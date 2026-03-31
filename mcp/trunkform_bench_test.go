@@ -60,7 +60,7 @@ func TestTrunkformLoadTest(t *testing.T) {
 				return
 			}
 			sessionID := resp.Header.Get("Mcp-Session-Id")
-			resp.Body.Close()
+			_ = resp.Body.Close()
 
 			// Call trunkform tool
 			trunkformPayload := map[string]interface{}{
@@ -90,7 +90,7 @@ func TestTrunkformLoadTest(t *testing.T) {
 				errorCount++
 			} else {
 				successCount++
-				resp.Body.Close()
+				_ = resp.Body.Close()
 			}
 			mu.Unlock()
 		}()

@@ -2,14 +2,15 @@
 package rubrichandlers
 
 import (
+	"trunkform-mcp/rubricHandlers/rubrichandler"
+	lintrubricbuilder "trunkform-mcp/rubricHandlers/lintrubricbuilder"
+	unittestrubricbuilder "trunkform-mcp/rubricHandlers/unittestrubricbuilder"
 	cicdboilerplaterubricbuilder "trunkform-mcp/rubricHandlers/cicdboilerplaterubricbuilder"
 	ciiacrubricbuilder "trunkform-mcp/rubricHandlers/ciiacrubricbuilder"
-	integrationtestrubricbuilder "trunkform-mcp/rubricHandlers/integrationtestrubricbuilder"
-	mocksrubricbuilder "trunkform-mcp/rubricHandlers/mocksrubricbuilder"
-	perftestrubricbuilder "trunkform-mcp/rubricHandlers/perftestrubricbuilder"
-	"trunkform-mcp/rubricHandlers/rubrichandler"
 	testdoublesrubricbuilder "trunkform-mcp/rubricHandlers/testdoublesrubricbuilder"
-	unittestrubricbuilder "trunkform-mcp/rubricHandlers/unittestrubricbuilder"
+	mocksrubricbuilder "trunkform-mcp/rubricHandlers/mocksrubricbuilder"
+	integrationtestrubricbuilder "trunkform-mcp/rubricHandlers/integrationtestrubricbuilder"
+	perftestrubricbuilder "trunkform-mcp/rubricHandlers/perftestrubricbuilder"
 )
 
 const InstructionPrefix = rubrichandler.InstructionPrefix
@@ -23,6 +24,7 @@ func AskTheUser(question string) string {
 // DefaultRubricHandlers returns the ordered list of rubric handlers for the trunkform workflow.
 func DefaultRubricHandlers() []rubrichandler.RubricHandler {
 	return []rubrichandler.RubricHandler{
+		lintrubricbuilder.NewRubricHandler(),
 		unittestrubricbuilder.NewRubricHandler(),
 		cicdboilerplaterubricbuilder.NewRubricHandler(),
 		ciiacrubricbuilder.NewRubricHandler(),

@@ -13,7 +13,7 @@ func TestMain(t *testing.T) {
 	originalStartServer := startServer
 	defer func() {
 		startServer = originalStartServer
-		recover()
+		_ = recover()
 	}()
 
 	called := false
@@ -25,11 +25,11 @@ func TestMain(t *testing.T) {
 		panic("exit test")
 	}
 
-	os.Setenv("TRUNKFORM_PORT", "9999")
-	defer os.Unsetenv("TRUNKFORM_PORT")
+	_ = os.Setenv("TRUNKFORM_PORT", "9999")
+	defer func() { _ = os.Unsetenv("TRUNKFORM_PORT") }()
 
 	func() {
-		defer func() { recover() }()
+		defer func() { _ = recover() }()
 		main()
 	}()
 
@@ -46,10 +46,10 @@ func TestMainDefaultPort(t *testing.T) {
 	originalStartServer := startServer
 	defer func() {
 		startServer = originalStartServer
-		recover()
+		_ = recover()
 	}()
 
-	os.Unsetenv("TRUNKFORM_PORT")
+	_ = os.Unsetenv("TRUNKFORM_PORT")
 
 	called := false
 	startServer = func(port string) error {
@@ -61,7 +61,7 @@ func TestMainDefaultPort(t *testing.T) {
 	}
 
 	func() {
-		defer func() { recover() }()
+		defer func() { _ = recover() }()
 		main()
 	}()
 

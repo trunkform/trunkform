@@ -3,9 +3,9 @@
 MAKE_LOGLEVEL ?= 4
 MAKE_ALL ?=
 
-all: deps build test message-install
+all: deps lint build test message-install
 
-test: deps build unit-test local-int-test-http local-perf-test 
+test: deps lint build unit-test local-int-test-http local-perf-test 
 
 kill:
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== KILL (port 8080) ===\033[0m"; fi
@@ -24,6 +24,12 @@ deps: clean
 	@go get github.com/mark3labs/mcp-go@latest
 	@go mod tidy
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Dependencies updated\033[0m"; fi
+	@echo
+
+lint: deps
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== LINT ===\033[0m"; fi
+	@golangci-lint run
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Lint passed\033[0m"; fi
 	@echo
 
 build: deps

@@ -13,10 +13,7 @@ import (
 )
 
 func TestNewTrunkformTool(t *testing.T) {
-	tt := NewTrunkformTool()
-	if tt == (TrunkformTool{}) {
-		// Validates struct creation
-	}
+	_ = NewTrunkformTool()
 }
 
 func TestToolDescription(t *testing.T) {
@@ -94,12 +91,20 @@ func TestProcessRubric(t *testing.T) {
 		rubric   map[string]*string
 		contains string
 	}{
+		{"lint-test", map[string]*string{
+			"lint-implemented": nil,
+		}, "Add Linting"},
+		{"unit-test", map[string]*string{
+			"lint-implemented":      strPtr("make"),
+			"unit-test-implemented": nil,
+		}, "Add Unit Test Coverage"},
 		{"ci-cd-boilerplate", map[string]*string{
-			"perf-test-implemented":        strPtr("make local-perf-test"),
+			"lint-implemented":             strPtr("make"),
 			"unit-test-implemented":        strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate": nil,
 		}, "CI/CD Automation Boilerplate"},
 		{"perf-test", map[string]*string{
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
@@ -108,12 +113,8 @@ func TestProcessRubric(t *testing.T) {
 			"integration-test-implemented":                   strPtr("make local-int-test-http"),
 			"perf-test-implemented":                          nil,
 		}, "Add Performance Testing"},
-		{"unit-test", map[string]*string{
-			"perf-test-implemented": strPtr("make local-perf-test"),
-			"unit-test-implemented": nil,
-		}, "Add Unit Test Coverage"},
 		{"integration-test", map[string]*string{
-			"perf-test-implemented":                          strPtr("make local-perf-test"),
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
@@ -122,20 +123,20 @@ func TestProcessRubric(t *testing.T) {
 			"integration-test-implemented":                   nil,
 		}, "Add Integration Testing"},
 		{"ci-iac", map[string]*string{
-			"perf-test-implemented":        strPtr("make local-perf-test"),
+			"lint-implemented":             strPtr("make"),
 			"unit-test-implemented":        strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate": strPtr("make"),
 			"continuous-integration-iac":   nil,
 		}, "Add Continuous Integration IAC"},
 		{"test-doubles", map[string]*string{
-			"perf-test-implemented":                          strPtr("make local-perf-test"),
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
 			"continuous-integration-test-double-implemented": nil,
 		}, "Add Continuous Integration Test Doubles"},
 		{"mocks", map[string]*string{
-			"perf-test-implemented":                          strPtr("make local-perf-test"),
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
@@ -144,6 +145,7 @@ func TestProcessRubric(t *testing.T) {
 		}, "Add Continuous Integration Mock Implementations"},
 		{"all-complete", map[string]*string{
 			"perf-test-implemented":                          strPtr("make local-perf-test"),
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
@@ -166,7 +168,7 @@ func TestProcessRubric(t *testing.T) {
 				t.Errorf("processRubric failed: %v", err)
 			}
 			if result == nil {
-				t.Error("Expected non-nil result")
+				t.Fatal("Expected non-nil result")
 			}
 			resultText := result.Content[0].(mcp.TextContent).Text
 			if !contains(resultText, tt.contains) {
@@ -207,11 +209,11 @@ func TestProcessRubricMissingKeys(t *testing.T) {
 		t.Errorf("processRubric failed: %v", err)
 	}
 	if result == nil {
-		t.Error("Expected non-nil result")
+		t.Fatal("Expected non-nil result")
 	}
 	resultText := result.Content[0].(mcp.TextContent).Text
-	if !contains(resultText, "Add Unit Test Coverage") {
-		t.Errorf("result text %q does not contain %q", resultText, "Add Unit Test Coverage")
+	if !contains(resultText, "Add Linting") {
+		t.Errorf("result text %q does not contain %q", resultText, "Add Linting")
 	}
 
 	args2 := trunkformSchema{
@@ -219,6 +221,7 @@ func TestProcessRubricMissingKeys(t *testing.T) {
 		Tools:   []string{"test"},
 		Related: []string{},
 		Rubric: map[string]*string{
+			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
@@ -232,7 +235,7 @@ func TestProcessRubricMissingKeys(t *testing.T) {
 		t.Errorf("processRubric failed: %v", err2)
 	}
 	if result2 == nil {
-		t.Error("Expected non-nil result for missing leading key")
+		t.Fatal("Expected non-nil result for missing leading key")
 	}
 	resultText2 := result2.Content[0].(mcp.TextContent).Text
 	if !contains(resultText2, "Add Performance Testing") {
@@ -297,13 +300,14 @@ func TestToolsArrayCheck(t *testing.T) {
 		Tools:   []string{"go"},
 		Related: []string{},
 		Rubric: map[string]*string{
-			"perf-test-implemented":                          strPtr("make local-perf-test"),
+			"lint-implemented":                               strPtr("golangci-lint run"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
 			"continuous-integration-iac":                     strPtr("terragrunt run --all apply"),
 			"continuous-integration-test-double-implemented": strPtr("make local-int-test-http"),
 			"continuous-integration-mocks-implemented":       strPtr("make local-int-test-http"),
 			"integration-test-implemented":                   strPtr("make local-int-test-http"),
+			"perf-test-implemented":                          strPtr("make local-perf-test"),
 		},
 	}
 	result, _ := processRubric(args)
@@ -322,7 +326,7 @@ func contains(s, substr string) bool {
 			return true
 		}
 	}
-return false
+	return false
 }
 
 func strPtr(s string) *string {
