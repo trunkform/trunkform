@@ -15,54 +15,63 @@ export default {
   <main>
     <img src="/hero.png" alt="" />
 
-    <section>
-      <nav>
-        <a href="/">trunkform</a>
-        <!-- <a href="#">log in</a> -->
-      </nav>
+    <nav>
+      <a href="/">trunkform</a>
+      <!-- <a href="#">log in</a> -->
+    </nav>
 
-      <div class="content">
-        <h1>Designed for Speed, Built for Trust</h1>
-        <p>
-          <b>trunkform</b>&trade; <b>MCP</b> helps developers remove process bottlenecks,
-          standardize delivery, and build release ready software.
-        </p>
+    <section id="hero">
+      <h1>Designed for Speed, Built for Trust</h1>
+      <p>
+        <b>trunkform</b>&trade; <b>MCP</b> helps developers remove process bottlenecks,
+        standardize delivery, and build release ready software.
+      </p>
 
-        <div>
-          <a href="https://github.com/trunkform/trunkform/blob/trunk/mcp/README.md">learn more</a>
-          <a href="https://github.com/trunkform/trunkform">view the source</a>
-        </div>
+      <div>
+        <a href="https://github.com/trunkform/trunkform/blob/trunk/mcp/README.md">learn more</a>
+        <a href="https://github.com/trunkform/trunkform">view the source</a>
       </div>
     </section>
 
-    <section>
-      <Trademark style="text-align: center; font-size: 1.3rem !important" />
+    <section id="trademark">
+      <Trademark />
     </section>
   </main>
 </template>
 
+
 <style scoped>
 main {
   min-height: 100vh;
-  padding: clamp(0.5rem, 3vw, 2rem) clamp(0.75rem, 5vw, 4rem);
+  padding: 1rem 2rem;
   overflow: hidden;
 }
 
-section:first-of-type {
+#hero {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   min-height: 100dvh;
   padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
 
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  min-height: 80vh;
-  max-height: 80vh;
+#trademark {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+#trademark :deep(p) {
+  font-size: 1rem;
+  color: var(--muted);
+  text-shadow:
+    0px 0px 30px #000000ed,
+    0px 0px 60px #000000ed;
+}
+
+#trademark :deep(a),
+#trademark :deep(a:visited) {
+  color: var(--muted);
 }
 
 img {
@@ -75,25 +84,16 @@ img {
   pointer-events: none;
 }
 
-p {
-  /* a big dark black text drop shadow */
-  text-shadow:
-    0px 0px 30px #000000ed,
-    0px 0px 60px #00000045,
-    0px 0px 90px #000000ed;
-  color: white;
-}
-
 h1,
 h2,
-p,
-.content > div {
+#hero p,
+#hero > div {
   position: relative;
   z-index: 1;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: clamp(0.5rem, 2vw, 2rem);
+  padding-bottom: 1rem;
 }
 
 nav {
@@ -103,11 +103,11 @@ nav {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: clamp(0.5rem, 2vw, 2rem);
+  padding-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0rem;
+  flex-shrink: 0;
 }
 
 nav a:first-child {
@@ -115,16 +115,12 @@ nav a:first-child {
   align-items: center;
   padding: 0;
   margin: 0;
-
-  background: transparent !important;
-  border: none !important;
+  background: transparent;
+  border: none;
   border-radius: 0;
-  box-shadow: none !important;
-
-  color: #fff !important;
+  box-shadow: none;
   font-size: 1.875rem;
   font-weight: 700;
-
   line-height: 1.5rem;
 }
 
@@ -143,7 +139,7 @@ nav a:first-child::before {
     0 0 18px rgba(0, 191, 255, 0.35);
 }
 
-nav a:last-child {
+nav a:last-child:not(:first-child) {
   padding: 1rem 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 14px;
@@ -156,7 +152,7 @@ h1 {
   max-width: 900px;
   margin: 0 auto 1rem;
   color: var(--text);
-  font-size: clamp(1.75rem, 7vw, 5.5rem);
+  font-size: clamp(1.5rem, 7vw, 5.5rem);
   line-height: 1;
   font-weight: 700;
 }
@@ -165,7 +161,16 @@ h2 {
   max-width: 900px;
   margin: 0 auto;
   color: var(--text);
-  font-size: clamp(2rem, 7vw, 4rem);
+  font-size: clamp(1.25rem, 7vw, 4rem);
+  line-height: 1;
+  font-weight: 700;
+}
+
+h3 {
+  max-width: 900px;
+  margin: 0 auto;
+  color: var(--text);
+  font-size: 1rem;
   line-height: 1;
   font-weight: 700;
 }
@@ -182,41 +187,44 @@ p:last-child {
   padding-bottom: 0;
 }
 
-/* all additional p after h2 should style this way*/
-#why {
-  max-width: 56rem;
-  margin: 0 auto 25vh auto;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  background: rgba(12, 16, 26, 0.55);
-  backdrop-filter: blur(18px);
-  text-align: left;
+#hero p {
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: clamp(1.125rem, 2.5vw + 0.5rem, 2.5rem);
+  line-height: 1.4;
+  text-shadow:
+    0px 0px 30px #000000ed,
+    0px 0px 60px #00000045,
+    0px 0px 90px #000000ed;
+  color: white;
 }
 
-.content > div {
-  margin-top: clamp(0.75rem, 3vw, 3rem);
+#hero p:last-child {
+  padding-bottom: 0;
+}
+
+#hero > div {
+  margin-top: 1.5rem;
   text-align: center;
 }
 
-div a {
+#hero > div a {
   display: inline-block;
   margin-right: 1rem;
-  padding: clamp(0.65rem, 2vw, 1.1rem) clamp(1rem, 3vw, 2rem);
+  padding: 0.85rem 1.5rem;
   border-radius: 12px;
-  font-size: clamp(0.875rem, 2.5vw, 1.1rem);
+  font-size: 1rem;
   font-weight: 600;
   text-align: center;
 }
 
-div a:first-child {
+#hero > div a:first-child {
   background: linear-gradient(180deg, #1ec8ff 0%, #009ee6 100%);
   color: #fff;
-  -webkit-text-fill-color: #fff;
   box-shadow: 0 0 24px rgba(0, 191, 255, 0.3);
 }
 
-div a:last-child {
+#hero > div a:last-child {
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(4, 16, 24, 0.85);
   color: #fff;
@@ -225,6 +233,38 @@ div a:last-child {
 @media (max-width: 768px) {
   main {
     padding: 1.5rem;
+  }
+
+  nav a:first-child {
+    font-size: 1.25rem;
+    padding-left: 0;
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1024px) {
+  h1,
+  #hero p,
+  #hero > div {
+    padding-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    width: 100%;
+  }
+
+  #hero p {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    width: 100%;
+  }
+
+  #hero > div a {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  #trademark :deep(p) {
+    font-size: 0.75rem;
   }
 
   nav a:first-child {
