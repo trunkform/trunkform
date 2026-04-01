@@ -1,11 +1,16 @@
 # Changelog
 
-## 2026-03-31
+## 0.1.1-rc1 2026-03-31
 
 ### Added
 
 - added a release binary action which triggers on new tags.
 - cleaned up makefile for deterministic releases
+- added tests which cover the order of operations by which the tool should test the rubric items.
+
+### Changed
+
+- fixed the order that the mcp server returns when you're ready to test each rubric item.
 
 ## 2026-03-11
 

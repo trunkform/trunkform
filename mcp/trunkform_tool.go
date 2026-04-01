@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	rubrichandlers "trunkform-mcp/rubricHandlers"
+	"trunkform-mcp/rubricHandlers/rubrichandler"
 )
 
 type TrunkformTool struct{}
@@ -46,6 +48,14 @@ type trunkformSchema struct {
 	Tools   []string           `json:"tools"`
 	Related []string           `json:"related"`
 	Rubric  map[string]*string `json:"rubric"`
+}
+
+func orderedRubricKeyList(handlers []rubrichandler.RubricHandler) string {
+	lines := make([]string, 0, len(handlers))
+	for i, handler := range handlers {
+		lines = append(lines, fmt.Sprintf("%d. %s", i+1, handler.Key()))
+	}
+	return strings.Join(lines, "\n")
 }
 
 func processRubric(args trunkformSchema) (*mcp.CallToolResult, error) {
@@ -88,13 +98,7 @@ require updates to integration tests?`) + `If they do require additional integra
 read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform json object.
 
 If they do not require additional integration testing, then execute every command stored in ./trunkform.json .rubric for the keys in this exact order:
-1. perf-test-implemented
-2. unit-test-implemented
-3. ci-cd-automation-boilerplate
-4. continuous-integration-iac
-5. continuous-integration-test-double-implemented
-6. continuous-integration-mocks-implemented
-7. integration-test-implemented
+` + orderedRubricKeyList(handlers) + `
 If any command fails, ` + AskTheUser(`would you like suggestions on how to remediate the failing test before the rubric item is marked null?`) + `If the user says no, immediately update that rubric item to null in ./trunkform.json, read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform object.
 
 If unit-testcoverage is 100%, has no measurable coverage ("Unknown%" means "no measureable coverage"), then tell the user that "all rubric items tested and complete. yolo 🚀", 

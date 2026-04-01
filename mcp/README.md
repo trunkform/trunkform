@@ -1,13 +1,20 @@
 # TRUNKFORM MCP SERVER (Go, Streamable HTTP)
 
+[![mcp-release](https://github.com/trunkform/trunkform/actions/workflows/mcp-release.yml/badge.svg)](https://github.com/trunkform/trunkform/actions/workflows/mcp-release.yml)
+
 ## Architecture
+
+It's just a server which uses the mcp-go library to handle incoming MCP requests. The MCP server is designed to be modular, allowing for easy addition of new rubric handlers. The directory structure is as follows:
 
 ```
 rubricHandlers/
-├── rubrichandler/              # Base interface
-├── perftestrubricbuilder/      # First of seven handler implementations
+├── rubrichandler/rubric_handler.go     # interface
+├── lintrubricbuilder/rubric_handler.go # First of many handler implementations
 ├── ...
-└── registry.go                 # Handler registration
+└── registry.go                         # Handler registration
+logf.go                                 # Logging utility
+main.go                                 # Server setup and routing
+trunkform_tool.go                       # 
 ```
 
 # SETUP

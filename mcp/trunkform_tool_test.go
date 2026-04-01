@@ -177,12 +177,15 @@ func TestProcessRubric(t *testing.T) {
 			if tt.name == "all-complete" && !contains(resultText, "If they do not require additional integration testing, then execute every command stored in ./trunkform.json .rubric for the keys in this exact order:") {
 				t.Errorf("result text %q does not contain ordered rubric execution instructions", resultText)
 			}
-			if tt.name == "all-complete" && !contains(resultText, "would you like suggestions on how to remediate the failing test before the rubric item is marked null?") {
-				t.Errorf("result text %q does not contain remediation prompt instructions", resultText)
-			}
-			if tt.name == "all-complete" && !contains(resultText, `Ask the user, \"is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?\" Wait for their response before proceeding. `) {
-				t.Errorf("result text %q does not contain coverage prompt instructions", resultText)
-			}
+				if tt.name == "all-complete" && !contains(resultText, "would you like suggestions on how to remediate the failing test before the rubric item is marked null?") {
+					t.Errorf("result text %q does not contain remediation prompt instructions", resultText)
+				}
+				if tt.name == "all-complete" && !contains(resultText, `1. lint-implemented\n2. unit-test-implemented\n3. ci-cd-automation-boilerplate\n4. continuous-integration-iac\n5. continuous-integration-test-double-implemented\n6. continuous-integration-mocks-implemented\n7. integration-test-implemented\n8. perf-test-implemented`) {
+					t.Errorf("result text %q does not contain the expected rubric execution order", resultText)
+				}
+				if tt.name == "all-complete" && !contains(resultText, `Ask the user, \"is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?\" Wait for their response before proceeding. `) {
+					t.Errorf("result text %q does not contain coverage prompt instructions", resultText)
+				}
 			if tt.name == "all-complete" && !contains(resultText, "Ask the user, \\\"do the changes\\nrequire updates to integration tests?\\\" Wait for their response before proceeding. ") {
 				t.Errorf("result text %q does not contain integration test prompt instructions", resultText)
 			}
