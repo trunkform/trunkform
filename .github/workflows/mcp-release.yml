@@ -1,0 +1,31 @@
+name: mcp-release
+
+concurrency: mcp-release-${{ github.ref }}
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    name: Release ${{ github.ref_name }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mcp
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PRERELEASE_FLAG: ${{ contains(github.ref_name, '-') && '--prerelease' || '' }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+        with:
+          go-version-file: ./mcp/go.mod
+      - run: MAKE_ALL=yup make
+      - run: |
+          gh release create "${GITHUB_REF_NAME}" bin/* \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes ${PRERELEASE_FLAG}

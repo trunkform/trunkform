@@ -1,4 +1,4 @@
-.PHONY: all deps build unit-test test local-int-test-http local-perf-test install kill clean
+.PHONY: all deps mcp-go-upgrade build unit-test test local-int-test-http local-perf-test install kill clean
 
 MAKE_LOGLEVEL ?= 4
 MAKE_ALL ?=
@@ -21,9 +21,15 @@ clean:
 
 deps: clean
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== DEPENDENCIES ===\033[0m"; fi
+	@go mod download
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Dependencies ready\033[0m"; fi
+	@echo
+
+mcp-go-upgrade: clean
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[34m=== MCP-GO UPGRADE ===\033[0m"; fi
 	@go get github.com/mark3labs/mcp-go@latest
 	@go mod tidy
-	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Dependencies updated\033[0m"; fi
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ mcp-go upgraded and module files tidied\033[0m"; fi
 	@echo
 
 lint: deps
@@ -46,6 +52,8 @@ build: deps
 		go build -o bin/trunkform-mcp-$$(go env GOOS)-$$(go env GOARCH) .; \
 	fi
 	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Binaries built\033[0m"; fi
+	@shasum -a 256 bin/* > bin/SHA256SUMS
+	@if [ $(MAKE_LOGLEVEL) -ge 4 ]; then echo "$$(date '+%Y/%m/%d %H:%M:%S') [INFO] \033[32m✓ Checksums generated\033[0m"; fi
 	@echo
 
 unit-test: build

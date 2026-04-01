@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-03-31
+
+### Added
+
+- added a release binary action which triggers on new tags.
+- cleaned up makefile for deterministic releases
+
 ## 2026-03-11
 
 ### Changed
