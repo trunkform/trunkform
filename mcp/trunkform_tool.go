@@ -18,20 +18,20 @@ const CriticalPrefix = rubrichandlers.CriticalPrefix
 const NeverGuess = rubrichandlers.NeverGuess
 const ToolDescription = `
 The trunkform tool is a software delivery checklisting tool, often used as a verb; "trunkform."
-USAGE INSTRUCTIONS: 
-When a user says "trunkform" it means to call this mcp tool, first reading the contents of the ./trunkform.json 
-file on disk and passing it as the argument. If the ./trunkform.json file does not exist, create the ./trunkform.json 
-file with the following schema and default values:
 
-~~~
+# USAGE INSTRUCTIONS:
+
+First, read the contents of the ./trunkform.json file on disk and pass it as the argument. If the ./trunkform.json file does not exist, create the ./trunkform.json file with the following schema and default values:
+
+` + "```json" + `
 {
   "version": "0.1.0",
   "tools": [],
   "related": [],
   "rubric": {
-	}
+  }
 }
-~~~
+` + "```" + `
 `
 
 func AskTheUser(question string) string {
@@ -92,14 +92,13 @@ func processRubric(args trunkformSchema) (*mcp.CallToolResult, error) {
 	}
 
 	logf.Tracef("processRubric: all rubric items completed", "\x1b[90m")
-	return mcp.NewToolResultStructuredOnly(map[string]any{"instructions": InstructionPrefix + `Inform the user the Rubric is complete but needs to be tested. ` + AskTheUser(`do the changes
-require updates to integration tests?`) + `If they do require additional integration testing, immediately update ./trunkform.json file so it sets
-.rubric.continuous-integration-test-double-implemented: null, .rubric.continuous-integration-mocks-implemented: null, .rubric.integration-test-implemented: null,
-read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform json object.
 
-If they do not require additional integration testing, then execute every command stored in ./trunkform.json .rubric for the keys in this exact order:
+	return mcp.NewToolResultStructuredOnly(map[string]any{"instructions": InstructionPrefix + `Inform the user the Rubric is complete but needs to be tested. ` + AskTheUser(`do the changes
+require updates to integration tests?`) + `If they do require additional integration testing, suggest the review additional test-double and mock necessary.
+
+If they do not require additional integration testing, then explicitly execute every command stored in ./trunkform.json .rubric for the keys in this exact order:
 ` + orderedRubricKeyList(handlers) + `
-If any command fails, ` + AskTheUser(`would you like suggestions on how to remediate the failing test before the rubric item is marked null?`) + `If the user says no, immediately update that rubric item to null in ./trunkform.json, read ./trunkform.json, and call the trunkform tool again with the entire updated trunkform object.
+If any command fails, ` + AskTheUser(`would you like suggestions on how to remediate the failing test?`) + `If yes, suggest a fix, re-run the command, and continue. If no, respond with "don't yolo yet, friend." and stop.
 
 If unit-testcoverage is 100%, has no measurable coverage ("Unknown%" means "no measureable coverage"), then tell the user that "all rubric items tested and complete. yolo 🚀", 
 otherwise` + AskTheUser(`is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?`) + `If the user says no, immediately update ./trunkform.json file so it contains 

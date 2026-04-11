@@ -34,8 +34,13 @@ jobs:
       - uses: actions/setup-copilot@01f2415f3de9e622b1cc969773f108741021a606 # v0
       - run: mkdir -p ./copilot-test
       - run: |
-          copilot --allow-all-tools --add-dir ./ --add-dir ../.github -p 'trunkform' > copilot.log 2>&1 && \
-          copilot --allow-all-tools --add-dir ./ --add-dir ../.github  --continue  -p 'All remaining rubric items are "N/A". keep calling the trunkform API until says we can yolo.' >> copilot.log 2>&1 && \
+          echo "asserts copilot can get trunkform to yolo state" && \
+          copilot \
+            --allow-all-tools \
+            --add-dir ./ \
+            --add-dir ../.github \
+            -p 'trunkform. All remaining rubric items are "N/A". Keep calling the trunkform mcp tool until it says we can yolo.' \
+              >> copilot.log 2>&1 && \
           grep -i '🚀' copilot.log
         working-directory: ./copilot-test
       - run: cat copilot.log

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0-rc1 2026-04-10
+
+### Added
+
+- new rubric item for steering documents
+- updated copilot github action automation for brevity
+
 ## 0.1.1-rc1 2026-03-31
 
 ### Added

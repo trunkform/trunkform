@@ -9,6 +9,7 @@ import (
 	"trunkform-mcp/rubricHandlers/lintrubricbuilder"
 	"trunkform-mcp/rubricHandlers/mocksrubricbuilder"
 	"trunkform-mcp/rubricHandlers/perftestrubricbuilder"
+	"trunkform-mcp/rubricHandlers/steeringrubricbuilder"
 	"trunkform-mcp/rubricHandlers/testdoublesrubricbuilder"
 	"trunkform-mcp/rubricHandlers/unittestrubricbuilder"
 )
@@ -27,6 +28,7 @@ func TestNewRubricHandlers(t *testing.T) {
 		name string
 		fn   func() interface{}
 	}{
+		{"steering", func() interface{} { return steeringrubricbuilder.NewRubricHandler() }},
 		{"lint", func() interface{} { return lintrubricbuilder.NewRubricHandler() }},
 		{"unittest", func() interface{} { return unittestrubricbuilder.NewRubricHandler() }},
 		{"cicdboilerplate", func() interface{} { return cicdboilerplaterubricbuilder.NewRubricHandler() }},
@@ -50,6 +52,7 @@ func TestNewRubricHandlers(t *testing.T) {
 func TestDefaultRubricHandlers(t *testing.T) {
 	handlers := DefaultRubricHandlers()
 	expectations := map[string]string{
+		"Add Steering":                                    "update .rubric.steering-implemented to the exact command used",
 		"Add Linting":                                     "update .rubric.lint-implemented to the exact command used",
 		"Add Unit Test Coverage":                          "update .rubric.unit-test-implemented to the exact command used",
 		"CI/CD Automation Boilerplate":                    "update .rubric.ci-cd-automation-boilerplate to \"cat <<< \\\"Boilerplate ci-cd automation was created\\\"\"",
@@ -60,8 +63,8 @@ func TestDefaultRubricHandlers(t *testing.T) {
 		"Add Performance Testing":                         "update .rubric.perf-test-implemented to the exact command used",
 	}
 
-	if len(handlers) != 8 {
-		t.Fatalf("expected 7 handlers, got %d", len(handlers))
+	if len(handlers) != 9 {
+		t.Fatalf("expected 9 handlers, got %d", len(handlers))
 	}
 
 	for _, h := range handlers {

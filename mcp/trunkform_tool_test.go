@@ -19,20 +19,20 @@ func TestNewTrunkformTool(t *testing.T) {
 func TestToolDescription(t *testing.T) {
 	expected := `
 The trunkform tool is a software delivery checklisting tool, often used as a verb; "trunkform."
-USAGE INSTRUCTIONS: 
-When a user says "trunkform" it means to call this mcp tool, first reading the contents of the ./trunkform.json 
-file on disk and passing it as the argument. If the ./trunkform.json file does not exist, create the ./trunkform.json 
-file with the following schema and default values:
 
-~~~
+# USAGE INSTRUCTIONS:
+
+First, read the contents of the ./trunkform.json file on disk and pass it as the argument. If the ./trunkform.json file does not exist, create the ./trunkform.json file with the following schema and default values:
+
+` + "```json" + `
 {
   "version": "0.1.0",
   "tools": [],
   "related": [],
   "rubric": {
-	}
+  }
 }
-~~~
+` + "```" + `
 `
 	if ToolDescription != expected {
 		t.Errorf("ToolDescription mismatch:\ngot: %q\nwant: %q", ToolDescription, expected)
@@ -91,19 +91,26 @@ func TestProcessRubric(t *testing.T) {
 		rubric   map[string]*string
 		contains string
 	}{
+		{"steering-test", map[string]*string{
+			"steering-implemented": nil,
+		}, "Add Steering"},
 		{"lint-test", map[string]*string{
-			"lint-implemented": nil,
+			"steering-implemented": strPtr("cat ./AGENTS.md"),
+			"lint-implemented":     nil,
 		}, "Add Linting"},
 		{"unit-test", map[string]*string{
+			"steering-implemented":  strPtr("cat ./AGENTS.md"),
 			"lint-implemented":      strPtr("make"),
 			"unit-test-implemented": nil,
 		}, "Add Unit Test Coverage"},
 		{"ci-cd-boilerplate", map[string]*string{
+			"steering-implemented":         strPtr("cat ./AGENTS.md"),
 			"lint-implemented":             strPtr("make"),
 			"unit-test-implemented":        strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate": nil,
 		}, "CI/CD Automation Boilerplate"},
 		{"perf-test", map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
@@ -114,6 +121,7 @@ func TestProcessRubric(t *testing.T) {
 			"perf-test-implemented":                          nil,
 		}, "Add Performance Testing"},
 		{"integration-test", map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
@@ -123,12 +131,14 @@ func TestProcessRubric(t *testing.T) {
 			"integration-test-implemented":                   nil,
 		}, "Add Integration Testing"},
 		{"ci-iac", map[string]*string{
+			"steering-implemented":         strPtr("cat ./AGENTS.md"),
 			"lint-implemented":             strPtr("make"),
 			"unit-test-implemented":        strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate": strPtr("make"),
 			"continuous-integration-iac":   nil,
 		}, "Add Continuous Integration IAC"},
 		{"test-doubles", map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
@@ -136,6 +146,7 @@ func TestProcessRubric(t *testing.T) {
 			"continuous-integration-test-double-implemented": nil,
 		}, "Add Continuous Integration Test Doubles"},
 		{"mocks", map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
@@ -144,6 +155,7 @@ func TestProcessRubric(t *testing.T) {
 			"continuous-integration-mocks-implemented":       nil,
 		}, "Add Continuous Integration Mock Implementations"},
 		{"all-complete", map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"perf-test-implemented":                          strPtr("make local-perf-test"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
@@ -174,13 +186,13 @@ func TestProcessRubric(t *testing.T) {
 			if !contains(resultText, tt.contains) {
 				t.Errorf("result text %q does not contain %q", resultText, tt.contains)
 			}
-			if tt.name == "all-complete" && !contains(resultText, "If they do not require additional integration testing, then execute every command stored in ./trunkform.json .rubric for the keys in this exact order:") {
+			if tt.name == "all-complete" && !contains(resultText, "If they do not require additional integration testing, then explicitly execute every command stored in ./trunkform.json .rubric for the keys in this exact order:") {
 				t.Errorf("result text %q does not contain ordered rubric execution instructions", resultText)
 			}
-				if tt.name == "all-complete" && !contains(resultText, "would you like suggestions on how to remediate the failing test before the rubric item is marked null?") {
+				if tt.name == "all-complete" && !contains(resultText, "would you like suggestions on how to remediate the failing test?") {
 					t.Errorf("result text %q does not contain remediation prompt instructions", resultText)
 				}
-				if tt.name == "all-complete" && !contains(resultText, `1. lint-implemented\n2. unit-test-implemented\n3. ci-cd-automation-boilerplate\n4. continuous-integration-iac\n5. continuous-integration-test-double-implemented\n6. continuous-integration-mocks-implemented\n7. integration-test-implemented\n8. perf-test-implemented`) {
+				if tt.name == "all-complete" && !contains(resultText, `1. steering-implemented\n2. lint-implemented\n3. unit-test-implemented\n4. ci-cd-automation-boilerplate\n5. continuous-integration-iac\n6. continuous-integration-test-double-implemented\n7. continuous-integration-mocks-implemented\n8. integration-test-implemented\n9. perf-test-implemented`) {
 					t.Errorf("result text %q does not contain the expected rubric execution order", resultText)
 				}
 				if tt.name == "all-complete" && !contains(resultText, `Ask the user, \"is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?\" Wait for their response before proceeding. `) {
@@ -191,7 +203,7 @@ func TestProcessRubric(t *testing.T) {
 			}
 			if tt.name == "all-complete" {
 				integrationPrompt := "Ask the user, \\\"do the changes\\nrequire updates to integration tests?\\\" Wait for their response before proceeding."
-				commandExecution := "If they do not require additional integration testing, then execute every command stored in ./trunkform.json .rubric for the keys in this exact order:"
+				commandExecution := "If they do not require additional integration testing, then explicitly execute every command stored in ./trunkform.json .rubric for the keys in this exact order:"
 				if strings.Index(resultText, integrationPrompt) > strings.Index(resultText, commandExecution) {
 					t.Errorf("result text %q does not place the integration test prompt before rubric execution", resultText)
 				}
@@ -205,7 +217,10 @@ func TestProcessRubricMissingKeys(t *testing.T) {
 		Version: "0.1.0",
 		Tools:   []string{"test"},
 		Related: []string{},
-		Rubric:  map[string]*string{"perf-test-implemented": strPtr("make local-perf-test")},
+		Rubric: map[string]*string{
+			"steering-implemented":  strPtr("cat ./AGENTS.md"),
+			"perf-test-implemented": strPtr("make local-perf-test"),
+		},
 	}
 	result, err := processRubric(args)
 	if err != nil {
@@ -224,6 +239,7 @@ func TestProcessRubricMissingKeys(t *testing.T) {
 		Tools:   []string{"test"},
 		Related: []string{},
 		Rubric: map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
@@ -303,6 +319,7 @@ func TestToolsArrayCheck(t *testing.T) {
 		Tools:   []string{"go"},
 		Related: []string{},
 		Rubric: map[string]*string{
+			"steering-implemented":                           strPtr("cat ./AGENTS.md"),
 			"lint-implemented":                               strPtr("make"),
 			"unit-test-implemented":                          strPtr("make unit-test"),
 			"ci-cd-automation-boilerplate":                   strPtr("make"),
