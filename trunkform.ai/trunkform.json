@@ -4,18 +4,23 @@
     "vite",
     "vue3",
     "GitHub Actions",
-    "jest"
+    "jest",
+    "eslint"
   ],
   "related": [
-    "../.github/workflows/trunkform.ai.yml"
+    "../.github/workflows/trunkform.ai.yml",
+    "AGENTS.md",
+    "eslint.config.js"
   ],
   "rubric": {
+    "steering-implemented": "cat ./AGENTS.md | grep -i '# TRUNKFORM'",
+    "lint-implemented": "npm run lint && cat ../.github/workflows/trunkform.ai.yml | grep -- 'npm run lint'",
     "perf-test-implemented": "cat <<< 'Performance tests are N/A'",
-    "unit-test-implemented": "npm test",
-    "ci-cd-automation-boilerplate": "cat ../.github/workflows/trunkform.ai.yml",
+    "unit-test-implemented": "npm test && cat ../.github/workflows/trunkform.ai.yml | grep -- 'npm test'",
+    "ci-cd-automation-boilerplate": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'max-parallel: 1'",
     "continuous-integration-iac": "cat <<< 'IAC is N/A... yet'",
     "continuous-integration-test-double-implemented": "cat <<< 'test doubles are N/A'",
     "continuous-integration-mocks-implemented": "cat <<< 'mocks are N/A'",
-    "integration-test-implemented": "cat ../.github/workflows/trunkform.ai.yml | grep -- '- environment: ci'"
+    "integration-test-implemented": "cat <<< 'integration tests are N/A'"
   }
 }

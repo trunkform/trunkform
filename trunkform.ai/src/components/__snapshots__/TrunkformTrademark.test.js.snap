@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TrunkformTrademark.vue > style block has not changed 1`] = `
+"
+
+p {
+  text-align: center;
+  color: var(--muted);
+  text-shadow:
+    0px 0px 30px #000000ed,
+    0px 0px 60px #000000ed;
+}
+
+a,
+a:visited {
+  color: var(--muted) !important;
+  text-decoration: none;
+}
+
+span {
+  white-space: nowrap;
+}
+"
+`;

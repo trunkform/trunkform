@@ -38,6 +38,7 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci
+      - run: npm run lint
       - run: npm test
       - run: npm run build
       - uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 #v6.0.0
