@@ -6,6 +6,8 @@ import (
 	lintrubricbuilder "trunkform-mcp/rubricHandlers/lintrubricbuilder"
 	unittestrubricbuilder "trunkform-mcp/rubricHandlers/unittestrubricbuilder"
 	cicdboilerplaterubricbuilder "trunkform-mcp/rubricHandlers/cicdboilerplaterubricbuilder"
+	cicdlintingbuilder "trunkform-mcp/rubricHandlers/cicdlintingbuilder"
+	cicdunittestingbuilder "trunkform-mcp/rubricHandlers/cicdunittestingbuilder"
 	ciiacrubricbuilder "trunkform-mcp/rubricHandlers/ciiacrubricbuilder"
 	testdoublesrubricbuilder "trunkform-mcp/rubricHandlers/testdoublesrubricbuilder"
 	mocksrubricbuilder "trunkform-mcp/rubricHandlers/mocksrubricbuilder"
@@ -29,6 +31,8 @@ func DefaultRubricHandlers() []rubrichandler.RubricHandler {
 		lintrubricbuilder.NewRubricHandler(),
 		unittestrubricbuilder.NewRubricHandler(),
 		cicdboilerplaterubricbuilder.NewRubricHandler(),
+		cicdlintingbuilder.NewRubricHandler(),
+		cicdunittestingbuilder.NewRubricHandler(),
 		ciiacrubricbuilder.NewRubricHandler(),
 		testdoublesrubricbuilder.NewRubricHandler(),
 		mocksrubricbuilder.NewRubricHandler(),

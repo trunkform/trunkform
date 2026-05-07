@@ -4,6 +4,8 @@ import (
 	"strings"
 	"testing"
 	"trunkform-mcp/rubricHandlers/cicdboilerplaterubricbuilder"
+	"trunkform-mcp/rubricHandlers/cicdlintingbuilder"
+	"trunkform-mcp/rubricHandlers/cicdunittestingbuilder"
 	"trunkform-mcp/rubricHandlers/ciiacrubricbuilder"
 	"trunkform-mcp/rubricHandlers/integrationtestrubricbuilder"
 	"trunkform-mcp/rubricHandlers/lintrubricbuilder"
@@ -32,6 +34,8 @@ func TestNewRubricHandlers(t *testing.T) {
 		{"lint", func() interface{} { return lintrubricbuilder.NewRubricHandler() }},
 		{"unittest", func() interface{} { return unittestrubricbuilder.NewRubricHandler() }},
 		{"cicdboilerplate", func() interface{} { return cicdboilerplaterubricbuilder.NewRubricHandler() }},
+		{"cicdlinting", func() interface{} { return cicdlintingbuilder.NewRubricHandler() }},
+		{"cicdunittesting", func() interface{} { return cicdunittestingbuilder.NewRubricHandler() }},
 		{"ciiac", func() interface{} { return ciiacrubricbuilder.NewRubricHandler() }},
 		{"integrationtest", func() interface{} { return integrationtestrubricbuilder.NewRubricHandler() }},
 		{"testdoubles", func() interface{} { return testdoublesrubricbuilder.NewRubricHandler() }},
@@ -56,6 +60,8 @@ func TestDefaultRubricHandlers(t *testing.T) {
 		"Add Linting":                                     "update .rubric.lint-implemented to the exact command used",
 		"Add Unit Test Coverage":                          "update .rubric.unit-test-implemented to the exact command used",
 		"CI/CD Automation Boilerplate":                    "update .rubric.ci-cd-automation-boilerplate to \"cat <<< \\\"Boilerplate ci-cd automation was created\\\"\"",
+		"CI/CD Linting Automation":                        "update .rubric.ci-cd-linting to the exact command used",
+		"CI/CD Unit Testing Automation":                   "update .rubric.ci-cd-unit-testing to the exact command used",
 		"Add Continuous Integration IAC":                  "update .rubric.continuous-integration-iac to the exact command used",
 		"Add Integration Testing":                         "update .rubric.integration-test-implemented to the exact command used",
 		"Add Continuous Integration Test Doubles":         "update .rubric.continuous-integration-test-double-implemented to the exact command used",
@@ -63,8 +69,8 @@ func TestDefaultRubricHandlers(t *testing.T) {
 		"Add Performance Testing":                         "update .rubric.perf-test-implemented to the exact command used",
 	}
 
-	if len(handlers) != 9 {
-		t.Fatalf("expected 9 handlers, got %d", len(handlers))
+	if len(handlers) != 11 {
+		t.Fatalf("expected 11 handlers, got %d", len(handlers))
 	}
 
 	for _, h := range handlers {
