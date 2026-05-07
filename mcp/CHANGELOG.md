@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0-rc1 2026-05-07
+
+### Added
+
+- new rubric item for cicd linting automation
+- new rubric item for cicd unit testing automation
+
 ## 0.2.0-rc1 2026-04-10
 
 ### Added
