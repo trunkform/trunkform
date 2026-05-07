@@ -31,7 +31,10 @@ jobs:
           mkdir -p "$HOME/.copilot" && \
           echo '{"mcpServers":{"trunkform":{"type":"http","url":"http://localhost:8080/mcp"}}}' \
             > "$HOME/.copilot/mcp-config.json"
-      - uses: actions/setup-copilot@01f2415f3de9e622b1cc969773f108741021a606 # v0
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: '24'
+      - run: npm install -g @github/copilot
       - run: mkdir -p ./copilot-test
       - run: |
           echo "asserts copilot can get trunkform to yolo state" && \
