@@ -6,8 +6,8 @@ terraform {
   source = "../../modules//www"
 }
 
-dependency "registered_domain" {
-  config_path = "../"
+dependency "zone" {
+  config_path = "../zone"
 }
 
 inputs = {
@@ -15,5 +15,5 @@ inputs = {
   domain_name = "trunkform.ai"
   environment = "cd"
   region      = "us-east-2"
-  zone_id     = dependency.registered_domain.outputs.zone_id
+  zone_id     = dependency.zone.outputs.zone_id
 }

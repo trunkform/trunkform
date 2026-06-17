@@ -3,15 +3,10 @@ include "root" {
 }
 
 terraform {
-  source = "../modules//registered_domain"
-}
-
-dependency "zone" {
-  config_path = "./zone"
+  source = "../modules//zone"
 }
 
 inputs = {
   domain_name = "trunkform.ai"
   environment = "cd"
-  name_servers = dependency.zone.outputs.name_servers
 }

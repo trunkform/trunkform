@@ -6,6 +6,11 @@ variable "domain_name" {
   type = string
 }
 
+variable "name_servers" {
+  type = list(string)
+  default = [null, null, null, null]
+}
+
 output "environment" {
   value = var.environment
 }
@@ -18,8 +23,12 @@ output "zone_id" {
   value = aws_route53_zone.this.zone_id
 }
 
-resource "aws_route53_zone" "this" {
-  name = var.domain_name
+removed {
+  from = aws_route53_zone.this
+
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "aws_route53domains_registered_domain" "this" {
@@ -32,15 +41,15 @@ resource "aws_route53domains_registered_domain" "this" {
   billing_privacy    = true
 
   name_server {
-    name = aws_route53_zone.this.name_servers[0]
+    name = var.name_servers[0]
   }
   name_server {
-    name = aws_route53_zone.this.name_servers[1]
+    name = var.name_servers[1]
   }
   name_server {
-    name = aws_route53_zone.this.name_servers[2]
+    name = var.name_servers[2]
   }
   name_server {
-    name = aws_route53_zone.this.name_servers[3]
+    name = var.name_servers[3]
   }
 }
