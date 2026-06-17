@@ -1,30 +1,14 @@
-variable "environment" {
+variable "domain_name" {
   type = string
 }
 
-variable "domain_name" {
+variable "environment" {
   type = string
 }
 
 variable "name_servers" {
   type = list(string)
   default = [null, null, null, null]
-}
-
-output "environment" {
-  value = var.environment
-}
-
-output "domain_name" {
-  value = var.domain_name
-}
-
-removed {
-  from = aws_route53_zone.this
-
-  lifecycle {
-    destroy = false
-  }
 }
 
 resource "aws_route53domains_registered_domain" "this" {
@@ -48,4 +32,12 @@ resource "aws_route53domains_registered_domain" "this" {
   name_server {
     name = var.name_servers[3]
   }
+}
+
+output "domain_name" {
+  value = var.domain_name
+}
+
+output "environment" {
+  value = var.environment
 }

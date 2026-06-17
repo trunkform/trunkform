@@ -6,16 +6,17 @@ variable "domain_name" {
   type = string
 }
 
-output "environment" {
-  value = var.environment
+variable "name_servers" {
+  type = list(string)
+  default = [null, null, null, null]
 }
 
-output "domain_name" {
-  value = var.domain_name
-}
+removed {
+  from = aws_route53_zone.this
 
-resource "aws_route53_zone" "this" {
-  name = var.domain_name
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "aws_route53domains_registered_domain" "this" {
@@ -28,9 +29,23 @@ resource "aws_route53domains_registered_domain" "this" {
   billing_privacy    = true
 
   name_server {
-    name = "dns1.registrar-servers.com"
+    name = var.name_servers[0]
   }
   name_server {
-    name = "dns2.registrar-servers.com"
+    name = var.name_servers[1]
   }
+  name_server {
+    name = var.name_servers[2]
+  }
+  name_server {
+    name = var.name_servers[3]
+  }
+}
+
+output "domain_name" {
+  value = var.domain_name
+}
+
+output "environment" {
+  value = var.environment
 }
