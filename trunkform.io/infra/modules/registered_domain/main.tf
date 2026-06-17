@@ -14,6 +14,10 @@ output "domain_name" {
   value = var.domain_name
 }
 
+resource "aws_route53_zone" "this" {
+  name = var.domain_name
+}
+
 resource "aws_route53domains_registered_domain" "this" {
   domain_name = var.domain_name
   auto_renew  = true
