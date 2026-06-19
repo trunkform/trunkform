@@ -18,6 +18,11 @@ variable "zone_id" {
   type = string
 }
 
+variable "force_destroy" {
+  type    = bool
+  default = false
+}
+
 locals {
   bucket  = "${replace(var.domain_name, ".", "-")}-${var.account}"
   region  = var.region
@@ -27,7 +32,7 @@ locals {
 
 resource "aws_s3_bucket" "www" {
   bucket              = local.bucket
-  force_destroy       = null
+  force_destroy       = var.force_destroy
   object_lock_enabled = false
   tags                = {}
 }

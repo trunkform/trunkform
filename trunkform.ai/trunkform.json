@@ -20,9 +20,9 @@
     "ci-cd-automation-boilerplate": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'max-parallel: 1'",
     "ci-cd-linting": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'npm run lint'",
     "ci-cd-unit-testing": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'npm test'",
-    "continuous-integration-iac": "cat <<< 'IAC is N/A... yet'",
+    "continuous-integration-iac": "cat ../.github/workflows/trunkform.ai.yml | grep -A3 -- 'strategy:' | grep -- '- environment: ci'",
     "continuous-integration-test-double-implemented": "cat <<< 'test doubles are N/A'",
     "continuous-integration-mocks-implemented": "cat <<< 'mocks are N/A'",
-    "integration-test-implemented": "cat <<< 'integration tests are N/A'"
+    "integration-test-implemented": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'curl -sf https://trunkform.io'"
   }
 }
