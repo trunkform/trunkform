@@ -25,8 +25,10 @@ jobs:
       matrix:
         ENV:
           - environment: ci
+            tld: io
             account: 810322435582
           - environment: cd
+            tld: ai
             account: 245760921574
       max-parallel: 1
     permissions:
@@ -56,14 +58,12 @@ jobs:
           tar xz < terragrunt_linux_amd64.tar.gz && chmod u+x terragrunt_linux_amd64 && sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
       - run: terragrunt run --all init --working-dir ./infra/${{ matrix.ENV.environment }}
       - run: terragrunt run --all apply --working-dir ./infra/${{ matrix.ENV.environment }}
-      - run: aws s3 sync ./dist s3://trunkform-ai-${{ matrix.ENV.account }} --delete
+      - run: aws s3 sync ./dist s3://trunkform-${{matrix.ENV.tld}}-${{ matrix.ENV.account }} --delete
       - run: |
           DIST_ID=$(terragrunt output -raw distribution_id)
           aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
         working-directory: ./trunkform.ai/infra/${{ matrix.ENV.environment }}/www
-      - if: ${{ matrix.ENV.environment == 'ci' }}
-        name: simple int test
-        run: curl -sf https://trunkform.io
+      - run: curl -sf https://trunkform.${{matrix.ENV.tld}}
       - if: ${{ matrix.ENV.environment == 'ci' }}
         run: terragrunt run --all apply --working-dir ./infra/${{ matrix.ENV.environment }}/www -- -destroy
       - if: always()
