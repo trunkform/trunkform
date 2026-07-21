@@ -1,5 +1,15 @@
 # Changelog
 
+## mcp/0.4.0-rc1 2026-07-20
+
+### Changed
+
+- Support `go install` method
+  - renamed the module import path from `trunkform-mcp` to `github.com/trunkform/trunkform/mcp` to support `go install github.com/trunkform/trunkform/mcp@<ref>`
+  - updated README to document binary-download from GitHub Releases as the primary install method, with `go install` as an optional alternative
+- Fixup for `go test ./...`
+  - gated the load test behind a `perftest` build tag so `go test ./...` passes without a running server; `make local-perf-test` now runs it via `go test -tags perftest`
+
 ## 0.3.0-rc1 2026-05-07
 
 ### Added

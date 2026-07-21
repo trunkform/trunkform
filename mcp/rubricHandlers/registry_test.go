@@ -3,17 +3,17 @@ package rubrichandlers
 import (
 	"strings"
 	"testing"
-	"trunkform-mcp/rubricHandlers/cicdboilerplaterubricbuilder"
-	"trunkform-mcp/rubricHandlers/cicdlintingbuilder"
-	"trunkform-mcp/rubricHandlers/cicdunittestingbuilder"
-	"trunkform-mcp/rubricHandlers/ciiacrubricbuilder"
-	"trunkform-mcp/rubricHandlers/integrationtestrubricbuilder"
-	"trunkform-mcp/rubricHandlers/lintrubricbuilder"
-	"trunkform-mcp/rubricHandlers/mocksrubricbuilder"
-	"trunkform-mcp/rubricHandlers/perftestrubricbuilder"
-	"trunkform-mcp/rubricHandlers/steeringrubricbuilder"
-	"trunkform-mcp/rubricHandlers/testdoublesrubricbuilder"
-	"trunkform-mcp/rubricHandlers/unittestrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/cicdboilerplaterubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/cicdlintingbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/cicdunittestingbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/ciiacrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/integrationtestrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/lintrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/mocksrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/perftestrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/steeringrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/testdoublesrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/unittestrubricbuilder"
 )
 
 func TestAskTheUser(t *testing.T) {

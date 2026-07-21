@@ -20,6 +20,14 @@ trunkform_tool.go                       #
 # SETUP
 
 ```sh
+go install github.com/trunkform/trunkform/mcp@latest
+```
+
+Or download the latest tag's binaries for your OS/arch from [GitHub Releases](https://github.com/trunkform/trunkform/releases).
+
+### Local dev (build from source)
+
+```sh
 make start
 ```
 

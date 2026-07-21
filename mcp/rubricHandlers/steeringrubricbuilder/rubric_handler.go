@@ -1,6 +1,6 @@
 package steeringrubricbuilder
 
-import "trunkform-mcp/rubricHandlers/rubrichandler"
+import "github.com/trunkform/trunkform/mcp/rubricHandlers/rubrichandler"
 
 func NewRubricHandler() rubrichandler.RubricHandler {
 	return rubrichandler.RubricHandler{

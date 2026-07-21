@@ -1,3 +1,5 @@
+//go:build perftest
+
 package main
 
 import (

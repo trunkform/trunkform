@@ -1,4 +1,4 @@
-module trunkform-mcp
+module github.com/trunkform/trunkform/mcp
 
 go 1.26.1
 

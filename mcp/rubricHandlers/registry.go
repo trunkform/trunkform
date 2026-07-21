@@ -2,18 +2,18 @@
 package rubrichandlers
 
 import (
-	"trunkform-mcp/rubricHandlers/rubrichandler"
-	lintrubricbuilder "trunkform-mcp/rubricHandlers/lintrubricbuilder"
-	unittestrubricbuilder "trunkform-mcp/rubricHandlers/unittestrubricbuilder"
-	cicdboilerplaterubricbuilder "trunkform-mcp/rubricHandlers/cicdboilerplaterubricbuilder"
-	cicdlintingbuilder "trunkform-mcp/rubricHandlers/cicdlintingbuilder"
-	cicdunittestingbuilder "trunkform-mcp/rubricHandlers/cicdunittestingbuilder"
-	ciiacrubricbuilder "trunkform-mcp/rubricHandlers/ciiacrubricbuilder"
-	testdoublesrubricbuilder "trunkform-mcp/rubricHandlers/testdoublesrubricbuilder"
-	mocksrubricbuilder "trunkform-mcp/rubricHandlers/mocksrubricbuilder"
-	integrationtestrubricbuilder "trunkform-mcp/rubricHandlers/integrationtestrubricbuilder"
-	perftestrubricbuilder "trunkform-mcp/rubricHandlers/perftestrubricbuilder"
-	steeringrubricbuilder "trunkform-mcp/rubricHandlers/steeringrubricbuilder"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/rubrichandler"
+	lintrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/lintrubricbuilder"
+	unittestrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/unittestrubricbuilder"
+	cicdboilerplaterubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/cicdboilerplaterubricbuilder"
+	cicdlintingbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/cicdlintingbuilder"
+	cicdunittestingbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/cicdunittestingbuilder"
+	ciiacrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/ciiacrubricbuilder"
+	testdoublesrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/testdoublesrubricbuilder"
+	mocksrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/mocksrubricbuilder"
+	integrationtestrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/integrationtestrubricbuilder"
+	perftestrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/perftestrubricbuilder"
+	steeringrubricbuilder "github.com/trunkform/trunkform/mcp/rubricHandlers/steeringrubricbuilder"
 )
 
 const InstructionPrefix = rubrichandler.InstructionPrefix

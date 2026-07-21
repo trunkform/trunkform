@@ -7,8 +7,8 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
-	rubrichandlers "trunkform-mcp/rubricHandlers"
-	"trunkform-mcp/rubricHandlers/rubrichandler"
+	rubrichandlers "github.com/trunkform/trunkform/mcp/rubricHandlers"
+	"github.com/trunkform/trunkform/mcp/rubricHandlers/rubrichandler"
 )
 
 type TrunkformTool struct{}
