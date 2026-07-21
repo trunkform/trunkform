@@ -1,12 +1,12 @@
 # Changelog
 
-## mcp/0.4.0-rc2 2026-07-20
+## mcp/v0.4.0-rc2 2026-07-20
 
 ### Fixed
 
 - `mcp-release.yml` tag-push trigger used `tags: ['*']`, which does not match slash-containing refs like `mcp/v0.4.0-rc1` (Actions glob semantics stop at `/`). Changed to `tags: ['**']` so prefixed tags trigger a release.
 
-## mcp/0.4.0-rc1 2026-07-20
+## mcp/v0.4.0-rc1 2026-07-20
 
 ### Changed
 
