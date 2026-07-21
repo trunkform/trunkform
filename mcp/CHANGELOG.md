@@ -1,12 +1,18 @@
 # Changelog
 
+## mcp/0.4.0-rc2 2026-07-20
+
+### Fixed
+
+- `mcp-release.yml` tag-push trigger used `tags: ['*']`, which does not match slash-containing refs like `mcp/v0.4.0-rc1` (Actions glob semantics stop at `/`). Changed to `tags: ['**']` so prefixed tags trigger a release.
+
 ## mcp/0.4.0-rc1 2026-07-20
 
 ### Changed
 
 - Support `go install` method
   - renamed the module import path from `trunkform-mcp` to `github.com/trunkform/trunkform/mcp` to support `go install github.com/trunkform/trunkform/mcp@<ref>`
-  - updated README to document binary-download from GitHub Releases as the primary install method, with `go install` as an optional alternative
+  - updated README to document `go install` as the primary install method, with a pointer to GitHub Releases binaries as an alternative
 - Fixup for `go test ./...`
   - gated the load test behind a `perftest` build tag so `go test ./...` passes without a running server; `make local-perf-test` now runs it via `go test -tags perftest`
 
