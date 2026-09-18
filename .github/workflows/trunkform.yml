@@ -41,7 +41,8 @@ jobs:
       - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
         with:
           go-version-file: ./trunkform/go.mod
-      - run: MAKE_ALL=yup make
+      - if: ${{ matrix.ENV.environment == 'persistent-resources-ci' }}
+        run: MAKE_ALL=yup make
       - uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 #v6.0.0
         with:
           aws-region: us-east-2
