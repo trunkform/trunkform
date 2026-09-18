@@ -1,6 +1,6 @@
 # TRUNKFORM
 
-[![mcp-release](https://github.com/trunkform/trunkform/actions/workflows/mcp-release.yml/badge.svg)](https://github.com/trunkform/trunkform/actions/workflows/mcp-release.yml)
+[![trunkform-release](https://github.com/trunkform/trunkform/actions/workflows/trunkform-release.yml/badge.svg)](https://github.com/trunkform/trunkform/actions/workflows/trunkform-release.yml)
 [![copilot](https://github.com/trunkform/trunkform/actions/workflows/copilot.yml/badge.svg)](https://github.com/trunkform/trunkform/actions/workflows/copilot.yml)
 
 This is the trunkform monorepo, which contains the code for the open source project. Please read our [contributing guidelines](CONTRIBUTING.md) before submitting any pull requests.

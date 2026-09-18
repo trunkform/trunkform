@@ -1,0 +1,144 @@
+# Changelog
+
+## trunkform/v1.0.0-rc1 2026-09-18
+
+### Changed
+
+- **BREAKING:** stdio is now the default MCP transport (npx/`go run`-style usage); pass `--http` to run the old Streamable HTTP server instead.
+- **BREAKING:** renamed the `mcp/` directory to `trunkform/` and updated the module path to `github.com/trunkform/trunkform/trunkform` to align the `go install` binary name with the project name.
+- **BREAKING:** renamed the built/installed binary from `trunkform-mcp` to `trunkform`.
+- Renamed `.github/workflows/mcp.yml` to `trunkform.yml` and `mcp-release.yml` to `trunkform-release.yml` to match the directory rename; updated status badges accordingly.
+- Added a backward-compatible override in `remote_state.hcl` so existing Terraform state keys (written under the `mcp/` prefix) keep resolving after the directory rename, avoiding a state migration.
+- Documented Claude Desktop and OpenCode MCP configs in the README, alongside the existing Copilot/Kiro/Gemini/Codex examples.
+- Added a stdio-based integration test (`make local-int-test-stdio`) as the primary integration check, since stdio is now the default transport; the existing HTTP integration test remains as a secondary check for the planned hosted HTTP server.
+- Updated `copilot.yml` CI to install and exercise the `trunkform` binary over stdio instead of booting the HTTP server.
+- `local-perf-test` remains the sustained-rate HTTP load test against the shared server (unchanged); a stdio equivalent was considered and dropped, since stdio is 1-process-per-client and has no shared-server capacity to load-test the way HTTP does.
+- Moved `local-int-test-stdio`, `local-int-test-http`, and `local-perf-test-http` off of hand-rolled bash (`printf`/`curl`/`awk`/`trap`/`lsof`) and into proper Go tests that spawn the freshly-built binary themselves on OS-assigned free ports; shared spawn/HTTP helpers live in `trunkform_testhelpers_test.go`. The Makefile targets are now one-line `go test` invocations, and status logging moved into the tests via the existing `logf` package.
+- **BREAKING:** `make start` no longer backgrounds itself with `&` and no longer depends on `kill`; it now runs in the foreground and blocks the terminal until stopped (Ctrl+C). How you manage the process (background it yourself, use a process manager, etc.) is no longer the Makefile's concern. Use `TRUNKFORM_PORT` if you need to run more than one instance concurrently.
+- `install` no longer depends on `kill` either; it now installs atomically (write to a temp file, then `mv` into place) so it's safe even if the previously-installed binary is currently running.
+- Removed the `kill` Makefile target entirely (`pkill trunkform` was a blunt instrument matching any process by that name, unscoped to anything this Makefile actually started).
+- `TestTrunkformLoadTestHTTP` now accepts `TRUNKFORM_MCP_PERF_TEST_URL` pointing at the full `/mcp` endpoint of an already-running server (local or hosted); when set, no local binary is spawned, so the perf test can target a deployed instance instead of only testing locally.
+- Removed the redundant `local-perf-test` alias target; `test` and everything else now depend on `local-perf-test-http` directly.
+- Removed the dead `pkill trunkform || true` cleanup step from `copilot.yml` - nothing in that workflow backgrounds or leaves a `trunkform` process running.
+- README setup instructions now cover configuring `GOPATH/bin` on `PATH` and installing via `go install`; all MCP client config examples (Claude, OpenCode, Copilot, Kiro, Gemini, Codex) now call the installed `trunkform` binary directly instead of `go run .../trunkform@latest`.
+
+## mcp/v0.4.0-rc2 2026-07-20
+
+### Fixed
+
+- `mcp-release.yml` tag-push trigger used `tags: ['*']`, which does not match slash-containing refs like `mcp/v0.4.0-rc1` (Actions glob semantics stop at `/`). Changed to `tags: ['**']` so prefixed tags trigger a release.
+
+## mcp/v0.4.0-rc1 2026-07-20
+
+### Changed
+
+- Support `go install` method
+  - renamed the module import path from `trunkform-mcp` to `github.com/trunkform/trunkform/mcp` to support `go install github.com/trunkform/trunkform/mcp@<ref>`
+  - updated README to document `go install` as the primary install method, with a pointer to GitHub Releases binaries as an alternative
+- Fixup for `go test ./...`
+  - gated the load test behind a `perftest` build tag so `go test ./...` passes without a running server; `make local-perf-test` now runs it via `go test -tags perftest`
+
+## 0.3.0-rc1 2026-05-07
+
+### Added
+
+- new rubric item for cicd linting automation
+- new rubric item for cicd unit testing automation
+
+## 0.2.0-rc1 2026-04-10
+
+### Added
+
+- new rubric item for steering documents
+- updated copilot github action automation for brevity
+
+## 0.1.1-rc1 2026-03-31
+
+### Added
+
+- added a release binary action which triggers on new tags.
+- cleaned up makefile for deterministic releases
+- added tests which cover the order of operations by which the tool should test the rubric items.
+
+### Changed
+
+- fixed the order that the mcp server returns when you're ready to test each rubric item.
+
+## 2026-03-11
+
+### Changed
+
+🔴 Migration steps:
+
+Convert YAML to JSON and replace rubric booleans:
+
+```bash
+yq -o=json \
+  'del(.steering) | 
+  .rubric |= with_entries(
+    select(.value == false) .value = null | 
+    select(.value == true) .value = "exit 1"
+  )' .trunkform > trunkform.json
+rm .trunkform
+```
+
+- Renamed `mcp/infra/prod/` to `mcp/infra/cd/`
+- Moved `mcp/infra/remote_state.hcl` to repo root `remote_state.hcl`
+- Updated `trunkform_bench_test.go` for new `trunkform` wrapper
+- Makefile: new `message-install` and `start` targets, `all` now prompts instead of auto-installing
+  - Makefile `make test` uses port 8081 to avoid conflicts with running server on 8080
+- Linted with `gofmt` (backlogged linting rubric handler)
+- [`trunkform_tool.go`](trunkform_tool.go) accepts trunkform.json content directly as individual parameters (removed formatArgs wrapper)
+- Guidance strings in [`trunkform_tool.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool.go) were updated to say:
+  - edit `./trunkform.json`
+  - reread the file
+  - call the tool again with the full updated object
+- Rubric values were changed from booleans to nullable strings.
+  - `null` means incomplete
+  - non-null string means complete
+  - N/A wording now says: `For Not Applicable (N/A), record a non-null string which echo's the reason given why it is N/A.`
+- [`trunkformSchema`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool.go) now uses `map[string]*string` for `Rubric`.
+- [`processRubric`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool.go) now treats:
+  - missing or `null` rubric entry as incomplete
+  - non-null rubric entry as complete
+- Steering was removed from the trunkformSchema since the tool's internal logic now fully handles the rubric state and completion path. Will implement custom rubric steering logic handling later.
+- JSON schema for rubric additional properties was updated from `boolean` to `["string", "null"]`.
+- Completion/reset instructions in the tool text were updated from `false` to `null`.
+- `handlePerfTest` was updated first to tell the AI to store the exact passing test command in `.rubric.perf-test-implemented`.
+- Then the rest of the rubric handlers were updated to include the same “store the exact command used” language:
+  - `handleCICDBoilerplate`
+  - `handleUnitTestCoverage`
+  - `handleIntegrationTest`
+  - `handleCIIaC`
+  - `handleTestDoubles`
+  - `handleMocks`
+- The “all complete” completion-path language was changed so it now:
+  - instructs execution of the commands stored in `./trunkform.json .rubric` in `keysToCheck` order
+  - then uses the final completion phrase `all rubric items tested and complete. yolo.`
+  - and the execution-intro text now says:
+    `Inform the user the Rubric is complete but needs to be tested, then execute every command stored in ./trunkform.json .rubric for the keys in this exact order`
+  - and if one of those commands fails, the AI must ask the user whether they want remediation suggestions before the rubric item is marked `null`
+- [`trunkform_tool_test.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool_test.go) was updated throughout to match the nullable-string rubric model and the revised language.
+- `TestHandlers` now asserts each handler includes the “update `.rubric...` to the exact command used” wording.
+- The completion-path test assertion was updated to match the new execution-intro wording.
+- [`Makefile`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/Makefile) integration payload was updated earlier to use nested `trunkform` arguments, and perf/integration invocations now use `null` for incomplete rubric entries where relevant.
+- [`trunkform_bench_test.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_bench_test.go) was updated to send `null` for incomplete `perf-test-implemented`.
+- [`trunkform.json`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform.json) currently stores string rubric commands, not booleans.
+- all rubric entries in `trunkform.json` were updated to store the exact command used to complete that rubric item, instead of just `true`.
+- One stored rubric command was corrected:
+  - `continuous-integration-iac` is now `cat ../.github/workflows/mcp.yml | grep 'terragrunt run --all apply'`
+- [`Makefile`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/Makefile) unit-test output was cleaned up to stop printing the raw statement-coverage line and instead report the enforced function-level coverage result directly.
+- The completion-path coverage prompt in [`trunkform_tool.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool.go) was revised to ask:
+  - `is less than 100% line coverage acceptable for these changes, or is the test command missing a coverage flag?`
+- The completion path in [`trunkform_tool.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool.go) now asks whether integration tests need updates before instructing the AI to run all rubric verification commands.
+- An existing malformed quote in the completion-path integration-test prompt was fixed in [`trunkform_tool.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool.go).
+- [`trunkform_tool_test.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool_test.go) now asserts the revised coverage prompt in the `all-complete` path.
+- [`trunkform_tool_test.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool_test.go) now asserts that the integration-test update question appears before rubric command execution in the `all-complete` path.
+- [`trunkform_tool_test.go`](/Users/Rich/Documents/source/trunkform/trunkform/mcp/trunkform_tool_test.go) also checks the new measurable-coverage wording in the completion path.
+
+### Added
+
+- new copilot test workflow in `.github/workflows/copilot.yml` which:
+  - starts the MCP server
+  - sets up copilot config to point to the MCP server
+  - runs copilot with the trunkform tool and checks for a rocket emoji in the output log to confirm it ran successfully against the MCP server

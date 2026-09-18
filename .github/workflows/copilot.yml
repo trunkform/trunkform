@@ -7,7 +7,7 @@ on:
     branches:
       - trunk
     paths:
-      - 'mcp/**/*'
+      - 'trunkform/**/*'
       - '.github/workflows/copilot.yml'
 
 env:
@@ -25,11 +25,12 @@ jobs:
       - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
         with:
           go-version: '1.24'
-      - run: make start
-        working-directory: ./mcp
+      - run: echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - run: make install
+        working-directory: ./trunkform
       - run: |
           mkdir -p "$HOME/.copilot" && \
-          echo '{"mcpServers":{"trunkform":{"type":"http","url":"http://localhost:8080/mcp"}}}' \
+          echo '{"mcpServers":{"trunkform":{"type":"stdio","command":"trunkform"}}}' \
             > "$HOME/.copilot/mcp-config.json"
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
@@ -48,6 +49,4 @@ jobs:
         working-directory: ./copilot-test
       - run: cat copilot.log
         working-directory: ./copilot-test
-        if: always()
-      - run: pkill trunkform-mcp || true
         if: always()
