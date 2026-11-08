@@ -27,7 +27,7 @@ export default {
 
 <style scoped>
 main {
-  min-height: 100vh;
+  min-height: 100lvh;
   padding: 1rem 2rem;
   overflow: hidden;
 }
@@ -160,5 +160,15 @@ main :deep(p:last-child) {
     font-size: 1.25rem;
     padding-left: 0;
   }
+}
+
+:global(html),
+:global(body) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:global(body::-webkit-scrollbar) {
+  display: none;
 }
 </style>

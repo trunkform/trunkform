@@ -30,7 +30,7 @@ img {
   position: fixed;
   inset: 0;
   width: 100%;
-  height: 100%;
+  height: 100lvh;
   object-fit: cover;
   opacity: 0.82;
   pointer-events: none;
@@ -40,7 +40,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100dvh;
+  min-height: 100lvh;
   padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
 

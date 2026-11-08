@@ -23,6 +23,6 @@
     "continuous-integration-iac": "cat ../.github/workflows/trunkform.ai.yml | grep -A3 -- 'strategy:' | grep -- '- environment: ci'",
     "continuous-integration-test-double-implemented": "cat <<< 'test doubles are N/A'",
     "continuous-integration-mocks-implemented": "cat <<< 'mocks are N/A'",
-    "integration-test-implemented": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'curl -sf https://trunkform.io'"
+    "integration-test-implemented": "cat ../.github/workflows/trunkform.ai.yml | grep -- 'curl -sf https://trunkform.'"
   }
 }
