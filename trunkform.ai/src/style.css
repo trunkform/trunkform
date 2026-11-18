@@ -5,7 +5,7 @@
   font-weight: 400;
 
   color: #ffffff;
-  background: #05070b;
+  background: #0c112b;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: auto;
 
   --blue: #00bfff;
-  --bg: #05070b;
+  --bg: #0c112b;
   --text: #f4f7fb;
   --muted: rgba(244, 247, 251, 0.72);
   --border: rgba(255, 255, 255, 0.12);
