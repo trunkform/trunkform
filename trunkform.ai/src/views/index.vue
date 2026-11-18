@@ -93,7 +93,7 @@ nav a:last-child:not(:first-child) {
 }
 
 :deep(h1) {
-  margin: 0 auto 1rem;
+  margin: calc(100dvh - 100lvh) auto 1rem;
   color: var(--text);
   font-size: clamp(1.5rem, 7vw, 5.5rem);
   line-height: 1;
